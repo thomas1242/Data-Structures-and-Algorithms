@@ -1,28 +1,32 @@
-public class ArrayList {
+public class ArrayList<T> {
 
-	private int[] arr;
+	private Object[] arr;
 	private int size;
 
 	public ArrayList() {
-		arr = new int[8];
+		arr = new Object[8];
 		size = 0;
 	}
 
-	private int[] resizeArr(int[] arr) {
-		int[] newArr = new int[size * 2];
+	public boolean isEmpty() {
+		return size == 0;	
+	}
+
+	private Object[] resizeArr(Object[] arr) {
+		Object[] newArr = new Object[size * 2];
 		for(int i = 0; i < arr.length; i++) 
 			newArr[i] = arr[i];
 		return newArr;
 	}
 
-	public void add(int n) {
+	public void add(T n) {
 		if(size == arr.length) 
 			arr = resizeArr(arr);
 
 		arr[size++] = n;
 	}
 
-	public void add(int n, int index) {
+	public void add(T n, int index) {
 
 		if(index < 0 || index > size)
 			return;
@@ -30,7 +34,7 @@ public class ArrayList {
 		if(size == arr.length) 
 			arr = resizeArr(arr);
 			
-		int[] temp = new int[arr.length + 1];
+		Object[] temp = new Object[arr.length + 1];
 
 		for(int i = 0; i < index; i++)
 			temp[i] = arr[i];
@@ -44,12 +48,12 @@ public class ArrayList {
 		size++;
 	}
 
-	public void remove(int index) {
+	public void remove(int index) {		// remove element at given index
 
 		if(index < 0 || index >= size)
 			return;
 
-		int[] temp = new int[arr.length - 1];
+		Object[] temp = new Object[arr.length - 1];
 
 		for (int i = 0; i < index; i++) 
 			temp[i] = arr[i];
@@ -60,11 +64,27 @@ public class ArrayList {
 		size--;
 	}
 
-	public int get(int index) {
+	@SuppressWarnings("unchecked")	// guaranteed to be legal at compile time	
+	public void remove(T obj) {	// remove given object from the list
+
+		if( isEmpty() )
+			return;
+
+		Object[] temp = new Object[arr.length - 1];
+
+		int index = 0;
+		while(index < size && obj != (T) arr[index])
+			index++;
+
+		remove(index);
+	}
+
+	@SuppressWarnings("unchecked")	// guaranteed to be legal at compile time
+	public T get(int index) {
 		if(index < 0 || index >= size)
 			throw new RuntimeException("Out of bounds: " + index + " not within [0," + (size - 1) + "]");
 		else
-			return arr[index];
+			return (T) arr[index];
 	}
 
 	public String toString() {
@@ -76,8 +96,21 @@ public class ArrayList {
 
 	public static void main(String[] args) {
 
-		ArrayList list = new ArrayList();
+		ArrayList<Integer> integerList = new ArrayList<>();
+		ArrayList<String> stringList = new ArrayList<>();
+
+		for(int i = 0; i <= 5; i++) 
+			integerList.add( i * 10 );
+
+		String[] words = new String[]{"one", "two", "four", "eight", "sixteen"};
+		for(String s : words) 
+			stringList.add( s );
 	
+		stringList.remove( 0 );
+		stringList.remove( "four" );
+
+		System.out.println( integerList.toString() );
+		System.out.println( stringList.toString() );
 	}
 
 }
