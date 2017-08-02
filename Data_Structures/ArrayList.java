@@ -12,21 +12,27 @@ public class ArrayList<T> {
 		return size == 0;	
 	}
 
-	@SuppressWarnings("unchecked")	
-	public T get(int index) {
-		if(index < 0 || index >= size)
-			throw new RuntimeException("Out of bounds: " + index + " not within [0," + (size - 1) + "]");
-		else
-			return (T) arr[index];
+	private Object[] resizeArr(Object[] arr) {
+		Object[] newArr = new Object[size * 2];
+		for(int i = 0; i < arr.length; i++) 
+			newArr[i] = arr[i];
+		return newArr;
 	}
 
-	public void add(T n) {				// append to list
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < size; i++)
+			sb.append(arr[i] + " ");
+		return sb.toString();
+	}
+
+	public void add(T n) {				// append
 		if(size == arr.length) 
 			arr = resizeArr(arr);
 		arr[size++] = n;
 	}
 
-	public void add(T n, int index) {	// insert at index in list
+	public void add(T n, int index) {	// insert at index 
 		if(index < 0 || index > size)
 			return;
 
@@ -35,11 +41,9 @@ public class ArrayList<T> {
 			
 		Object[] temp = new Object[arr.length + 1];
 
-		for(int i = 0; i < index; i++)
+		for(int i = 0; i < index; i++) 
 			temp[i] = arr[i];
-
 		temp[index] = n;
-
 		for(int i = index; i < arr.length; i++) 
 			temp[i + 1] = arr[i];
 		
@@ -47,16 +51,12 @@ public class ArrayList<T> {
 		size++;
 	}
 
-	@SuppressWarnings("unchecked")	 
-	public void remove(T obj) {			/// remove element from the list
-		if( isEmpty() )
-			return;
-
-		int index = 0;
-		while(index < size && obj != (T) arr[index])
-			index++;
-
-		remove(index);
+	@SuppressWarnings("unchecked")	
+	public T get(int index) {			// get element at index
+		if(index < 0 || index >= size)
+			throw new RuntimeException("Out of bounds: " + index + " not within [0," + (size - 1) + "]");
+		else
+			return (T) arr[index];
 	}
 
 	public void remove(int index) {		// remove element at index
@@ -74,18 +74,16 @@ public class ArrayList<T> {
 		size--;
 	}
 
-	private Object[] resizeArr(Object[] arr) {
-		Object[] newArr = new Object[size * 2];
-		for(int i = 0; i < arr.length; i++) 
-			newArr[i] = arr[i];
-		return newArr;
-	}
+	@SuppressWarnings("unchecked")	 
+	public void remove(T obj) {			/// remove element from the list
+		if( isEmpty() )
+			return;
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < size; i++)
-			sb.append(arr[i] + " ");
-		return sb.toString();
+		int index = 0;
+		while(index < size && obj != (T) arr[index])
+			index++;
+
+		remove(index);
 	}
 
 	public static void main(String[] args) {
