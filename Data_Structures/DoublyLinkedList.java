@@ -9,21 +9,8 @@ public class DoublyLinkedList {
 		}
 	}	
 
-	public static void main(String[] args) {
-
-		DoublyLinkedList list = new DoublyLinkedList();
-
-		list.push(55);
-		list.append(123);
-		// list.pop();
-		// list.insert(10, 3);
-		// list.delete(123);
-
-		list.print();
-	}
-
 	private Node head;
-	int size;
+	private int size;
 
 	public DoublyLinkedList() {
 		head = null;
@@ -62,7 +49,6 @@ public class DoublyLinkedList {
 	}
 
 	public void insert(int data, int index) {
-
 		if(index < 0 || index > size)
 			return;
 
@@ -135,8 +121,6 @@ public class DoublyLinkedList {
 		return data;
 	}
 
-
-
 	public void print() {
 		Node curr = head;
 		while(curr != null) {
@@ -144,5 +128,18 @@ public class DoublyLinkedList {
 			curr = curr.next;
 		}
 		System.out.println();
+	}
+
+	public static void main(String[] args) {
+		
+		DoublyLinkedList list = new DoublyLinkedList();
+
+		list.push(55);
+		list.append(123);
+		// list.pop();
+		// list.insert(10, 3);
+		// list.delete(123);
+
+		list.print();
 	}
 }
