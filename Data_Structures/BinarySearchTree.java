@@ -2,52 +2,27 @@ import java.util.*;
 
 public class BinarySearchTree<T extends Comparable<T>> {
 
-	private class TreeNode<T> {
+	private static class TreeNode<T> {
 		T data; 
 		TreeNode left;
 		TreeNode right;
-
 		public TreeNode(T data) {
 			this.data = data;
 		}
 	}
 
-	 private int compare(T x, T y)
-   {
-      return x.compareTo(y);
-   }
+	private TreeNode root;
+	public BinarySearchTree() {}
 
-
-	public TreeNode remove(TreeNode root, T data) {
-		if(root == null)
-			return root; // node not found, return root unchanged
-		else if (data.compareTo((T)root.data) < 0)
-			root.left = remove(root.left, data);
-		else if (data.compareTo((T)root.data) > 0)
-			root.right = remove(root.right, data);
-		else {	// found node to remove
-
-			if(root.left == null)
-				return root.right;
-			if(root.right == null)
-				return root.left;
-
-			T min = getMin(root.right);
-			root.data = min;
-			root.right = remove(root.right, min);
-		}
-
-		return root;	// return the modified root
+	public void insert(T data) {
+		root = insert(root, data);
 	}
 
-	public T getMin(TreeNode root) {
-		TreeNode curr = root;
-		while(curr.left != null)
-			curr = curr.left;
-		return (T)curr.data;
+	public void remove(T data) {
+		root = remove(root, data);
 	}
 
-	public TreeNode insert(TreeNode node, T data) {
+	private TreeNode insert(TreeNode node, T data) {
 		if(node == null)
 			node = new TreeNode(data);
 		else if (data.compareTo((T)node.data) > 0)
@@ -58,47 +33,80 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		return node;
 	}
 
-	public int treeSize(TreeNode root) {
-		if(root == null)
+	private TreeNode remove(TreeNode node, T data) {
+		if(node == null)
+			return node; 
+		else if (data.compareTo((T)node.data) < 0)
+			node.left = remove(node.left, data);
+		else if (data.compareTo((T)node.data) > 0)
+			node.right = remove(node.right, data);
+		else {	
+
+			if(node.left == null)
+				return node.right;
+			if(node.right == null)
+				return node.left;
+
+			T min = getMin(node.right);
+			node.data = min;
+			node.right = remove(node.right, min);
+		}
+
+		return node;	// return updated node
+	}
+
+	public T getMin(TreeNode node) {
+		TreeNode curr = node;
+		while(curr.left != null)
+			curr = curr.left;
+		return (T)curr.data;
+	}
+
+	public int size(TreeNode node) {
+		if(node == null)
 			return 0;
 		else
-			return 1 + treeSize(root.left) + treeSize(root.right);
+			return 1 + size(node.left) + size(node.right);
 	}
 
+	public void inOrder() {		inOrder(root);		}
+	public void preOrder() {	preOrder(root);		}
+	public void postOrder() {	postOrder(root);	}
+	public void levelOrder() {	levelOrder(root);	}
 
-	public void inOrderTraversal(TreeNode root) {
-		if(root == null)
+	private void inOrder(TreeNode node) {
+		if(node == null)
 			return;
-		inOrderTraversal(root.left);
-		System.out.print(" " + root.data);
-		inOrderTraversal(root.right);
+		inOrder(node.left);
+		System.out.print(node.data + " ");
+		inOrder(node.right);
 	}
 
-	public void preOrder(TreeNode root) {
-		if (root == null) 
+	private void preOrder(TreeNode node) {
+		if (node == null) 
 			return;
-		System.out.print(" " + root.data);
-		preOrder(root.left);
-		preOrder(root.right);
+		System.out.print(node.data + " ");
+		preOrder(node.left);
+		preOrder(node.right);
 	}
 
-	public void postOrder(TreeNode root) {
-		if (root == null) 
+	private void postOrder(TreeNode node) {
+		if (node == null) 
 			return;
-		postOrder(root.left);
-		postOrder(root.right);
-		System.out.print(" " + root.data);
+		postOrder(node.left);
+		postOrder(node.right);
+		System.out.print(node.data + " ");
 	}
 
-	public void levelOrder(TreeNode root) {
-		if (root == null)
+	private void levelOrder(TreeNode node) {
+		if (node == null)
 			return;
 		Queue<TreeNode> q = new LinkedList<>(); 
-		q.add(root);
+		q.add(node);
 		TreeNode curr;
 		while(!q.isEmpty()) {
 			curr = q.poll();
-			System.out.print(" " + curr.data);
+			System.out.print(node.data + " ");
 			if(curr.left != null)
 				q.add(curr.left);
 			if(curr.right != null)
@@ -106,30 +114,25 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		}
 	}
 
-	public TreeNode delete(TreeNode root, T data) {
-		if(root == null)
-			return root;
-		else if (data.compareTo((T)root.data) < 0)
-			root.left = delete(root.left, data);
-		else if (data.compareTo((T)root.data) > 0)
-			root.right = delete(root.right, data);
-		else
-		{
-			if(root.left == null)
-				return root.right;
-			if(root.right == null)
-				return root.left;
-
-			T min = getMin(root.right);
-			root.data = min;
-			root.right = delete(root.right, min);
-		}
-		return root;
-	}	
-
 	public static void main(String[] args) {
 
+		BinarySearchTree<String> strs = new BinarySearchTree<>();
+		BinarySearchTree<Integer> ints = new BinarySearchTree<>();
 
+		Random rand = new Random();
+		for(int i = 0; i < 5; i++)
+			ints.insert( rand.nextInt(100) );
+
+		strs.insert("hello");
+		strs.insert("world");
+		strs.insert("one");
+		strs.insert("and");;
+		strs.insert("zero");
+
+		ints.inOrder();
+		System.out.println();
+		strs.inOrder();
+		System.out.println();
 
 	}
 }

@@ -1,6 +1,6 @@
 public class DoublyLinkedList<T> {
 
-	private class Node<T> {
+	private static class Node<T> {
 		T data;
 		Node next;
 		Node prev;
