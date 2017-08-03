@@ -1,10 +1,10 @@
-public class DoublyLinkedList {
+public class DoublyLinkedList<T> {
 
-	private class Node {
-		int data;
+	private class Node<T> {
+		T data;
 		Node next;
 		Node prev;
-		public Node(int data) {
+		public Node(T data) {
 			this.data = data;
 		}
 	}	
@@ -17,7 +17,7 @@ public class DoublyLinkedList {
 		size = 0;
 	}
 
-	public void push(int data) {
+	public void push(T data) {
 		Node newNode = new Node(data);
 		newNode.prev = null;
 
@@ -30,7 +30,18 @@ public class DoublyLinkedList {
 		size++;
 	}
 
-	public void append(int data) {
+	public T pop() {
+		if(head == null)
+			return null;
+
+		if(head.next != null)
+			head = head.next;
+		head.prev = null;
+
+		return (T) head.data;
+	}
+
+	public void append(T data) {
 		Node newNode = new Node(data);
 		newNode.next = null;
 
@@ -48,7 +59,7 @@ public class DoublyLinkedList {
 		size++;
 	}
 
-	public void insert(int data, int index) {
+	public void insert(T data, int index) {
 		if(index < 0 || index > size)
 			return;
 
@@ -78,7 +89,7 @@ public class DoublyLinkedList {
 		}
 	}
 
-	public void delete(int data) {
+	public void remove(T data) {
 		if(head == null)
 			return;
 
@@ -107,24 +118,11 @@ public class DoublyLinkedList {
 		curr.next = null;
 	}
 
-	public int pop() {
-		if(head == null)
-			return -1;
-		int data = head.data;
-
-		if(head.next != null)
-			head = head.next;
-
-		head.prev.next = null;
-		head.prev = null;
-
-		return data;
-	}
-
 	public void print() {
+		System.out.print(this + " : ");
 		Node curr = head;
 		while(curr != null) {
-			System.out.print(curr.data + " ");
+			System.out.print("[ " + curr.data + " ] ");
 			curr = curr.next;
 		}
 		System.out.println();
@@ -132,14 +130,20 @@ public class DoublyLinkedList {
 
 	public static void main(String[] args) {
 		
-		DoublyLinkedList list = new DoublyLinkedList();
+		DoublyLinkedList<String> strings = new DoublyLinkedList();
+		DoublyLinkedList<Integer> ints = new DoublyLinkedList();
 
-		list.push(55);
-		list.append(123);
-		// list.pop();
-		// list.insert(10, 3);
-		// list.delete(123);
+		strings.push("one");
+		strings.append("hello");
+		strings.insert("world", 2);
+		strings.remove("one");
 
-		list.print();
+		ints.push(1);
+		ints.push(2);
+		ints.append(3);
+		ints.pop();
+
+		strings.print();
+		ints.print();
 	}
 }
