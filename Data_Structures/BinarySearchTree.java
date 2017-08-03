@@ -2,29 +2,33 @@ import java.util.*;
 
 public class BinarySearchTree<T extends Comparable<T>> {
 
-	private static class TreeNode<T> {
+	private static class Node<T> {
 		T data; 
-		TreeNode left;
-		TreeNode right;
-		public TreeNode(T data) {
+		Node left;
+		Node right;
+		public Node(T data) {
 			this.data = data;
 		}
 	}
 
-	private TreeNode root;
+	private Node root;
 	public BinarySearchTree() {}
 
 	public void insert(T data) {
 		root = insert(root, data);
 	}
 
+	public boolean contains(T data) {
+		return contains(root, data);
+	}
+
 	public void remove(T data) {
 		root = remove(root, data);
 	}
 
-	private TreeNode insert(TreeNode node, T data) {
+	private Node insert(Node node, T data) {
 		if(node == null)
-			node = new TreeNode(data);
+			node = new Node(data);
 		else if (data.compareTo((T)node.data) > 0)
 			node.right = insert(node.right, data);
 		else
@@ -33,7 +37,18 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		return node;
 	}
 
-	private TreeNode remove(TreeNode node, T data) {
+	private boolean contains(Node node, T data) {
+		if(node == null)
+			return false;
+		else if (data.compareTo((T)node.data) > 0)
+			return contains(node.right, data);
+		else if (data.compareTo((T)node.data) < 0)
+			return contains(node.left, data);
+		else
+			return true;
+	}
+
+	private Node remove(Node node, T data) {
 		if(node == null)
 			return node; 
 		else if (data.compareTo((T)node.data) < 0)
@@ -55,14 +70,14 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		return node;	// return updated node
 	}
 
-	public T getMin(TreeNode node) {
-		TreeNode curr = node;
+	public T getMin(Node node) {
+		Node curr = node;
 		while(curr.left != null)
 			curr = curr.left;
 		return (T)curr.data;
 	}
 
-	public int size(TreeNode node) {
+	public int size(Node node) {
 		if(node == null)
 			return 0;
 		else
@@ -74,7 +89,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	public void postOrder() {	postOrder(root);	}
 	public void levelOrder() {	levelOrder(root);	}
 
-	private void inOrder(TreeNode node) {
+	private void inOrder(Node node) {
 		if(node == null)
 			return;
 		inOrder(node.left);
@@ -82,7 +97,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		inOrder(node.right);
 	}
 
-	private void preOrder(TreeNode node) {
+	private void preOrder(Node node) {
 		if (node == null) 
 			return;
 		System.out.print(node.data + " ");
@@ -90,7 +105,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		preOrder(node.right);
 	}
 
-	private void postOrder(TreeNode node) {
+	private void postOrder(Node node) {
 		if (node == null) 
 			return;
 		postOrder(node.left);
@@ -98,12 +113,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		System.out.print(node.data + " ");
 	}
 
-	private void levelOrder(TreeNode node) {
+	private void levelOrder(Node node) {
 		if (node == null)
 			return;
-		Queue<TreeNode> q = new LinkedList<>(); 
+		Queue<Node> q = new LinkedList<>(); 
 		q.add(node);
-		TreeNode curr;
+		Node curr;
 		while(!q.isEmpty()) {
 			curr = q.poll();
 			System.out.print(node.data + " ");
@@ -119,9 +134,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		BinarySearchTree<String> strs = new BinarySearchTree<>();
 		BinarySearchTree<Integer> ints = new BinarySearchTree<>();
 
-		Random rand = new Random();
-		for(int i = 0; i < 5; i++)
-			ints.insert( rand.nextInt(100) );
+		ints.insert( 7 );
+		ints.insert( 3 );
+		ints.insert( 15 );
+		ints.insert( 30 );
+		ints.insert( 25 );
 
 		strs.insert("hello");
 		strs.insert("world");
@@ -131,24 +148,9 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
 		ints.inOrder();
 		System.out.println();
+
 		strs.inOrder();
 		System.out.println();
-
 	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
