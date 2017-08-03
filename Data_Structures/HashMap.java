@@ -1,24 +1,23 @@
 public class HashMap<K, V> {
 
-	private static class HashNode<K, V> {
+	private static class Node<K, V> {
 		private K key;
 		private V value;
-		private HashNode next;
+		private Node next;
 
-		public HashNode(K key, V value) {
+		public Node(K key, V value) {
 				this.key = key;
 				this.value = value;
-				this.next = null;
 		}
 	}
 
 	private static final int initial_capacity = 8;
 	private static final double load_factor  = 0.7;
-	private HashNode[] table;
+	private Node[] table;
 	private int size;
 
 	public HashMap() {
-		table = new HashNode[ initial_capacity ];
+		table = new Node[ initial_capacity ];
 		size = 0;
 	}
 
@@ -29,52 +28,50 @@ public class HashMap<K, V> {
 			table = resizeArray(table);
 
 		if(table[hashCode] == null)
-			table[hashCode] = new HashNode(key, value);
+			table[hashCode] = new Node(key, value);
 		else {
-			HashNode curr = table[hashCode];
+			Node curr = table[hashCode];
 			while(curr.next != null)
 				curr = curr.next;
-			curr.next = new HashNode(key, value);
+			curr.next = new Node(key, value);
 		}
 	}
 
 	public V get(K key) {
 		int hashCode = getHashCode( key );
 		
-		HashNode curr = table[hashCode];
+		Node curr = table[hashCode];
 		while(curr != null && curr.key != key)
 			curr = curr.next;
 
 		if(curr != null) 
 			return (V)curr.value;
-
 		// if entry not found due to resize
 		else {
-			for(HashNode list : table) {	// search the whole table, it could be anywhere
+			for(Node list : table) {	// search the whole table, it could be anywhere
 				curr = list;
 				while(curr != null && curr.key != key)
 					curr = curr.next;
 				if(curr != null && curr.key == key)
 					return (V)curr.value;
 			}
-				return null;
+			return null;
 		}
 	}
 
 	public boolean containsKey(K key) {
 		int hashCode = getHashCode( key );
 		
-		HashNode curr = table[hashCode];
+		Node curr = table[hashCode];
 		while(curr != null && curr.key != key)
 			curr = curr.next;
 
 		// if entry found
 		if(curr != null) 
 			return true;
-
 		// if entry not found due to array resizing after first hash
 		else {
-			for(HashNode list : table) {	// search the whole table, it could be anywhere
+			for(Node list : table) {	// search the whole table, it could be anywhere
 				curr = list;
 				while(curr != null && curr.key != key)
 					curr = curr.next;
@@ -85,12 +82,10 @@ public class HashMap<K, V> {
 		}
 	}
 
-	public HashNode[] resizeArray(HashNode[] oldTable) {
-		HashNode[] newTable = new HashNode[oldTable.length * 2];
-
+	public Node[] resizeArray(Node[] oldTable) {
+		Node[] newTable = new Node[oldTable.length * 2];
 		for(int i = 0; i < oldTable.length; i++) 
 			newTable[i] = oldTable[i];
-	
 		return newTable;
 	}
 
@@ -98,8 +93,8 @@ public class HashMap<K, V> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		int i = 0;
-		for (HashNode n : table) {
-			HashNode curr = n;
+		for (Node n : table) {
+			Node curr = n;
 			sb.append( "bucket " + i++ + ": " );
 			while(curr != null) {
 				sb.append( "{" + curr.key + ", " + curr.value + "} " );
