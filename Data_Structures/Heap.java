@@ -10,9 +10,11 @@ public class Heap {
     int getLeft(int index) {
         return index * 2;
     }
+    
     int getRight(int index) {
         return index * 2 + 1;
     }
+
     int getParent(int index) {
         return index / 2;
     }
@@ -22,7 +24,11 @@ public class Heap {
     }
 
     void insert(int val) {
-    	arr[++size] = val; 
+        if(size == arr.length - 1)  
+            arr = resizeArr(arr);
+
+    	arr[++size] = val;         
+
     	int index = size;
     	while( index > 0 && arr[index] < arr[ getParent(index) ] ) {   // bubble up
     		int temp = arr[ getParent(index) ];
@@ -38,24 +44,43 @@ public class Heap {
 
         int index = 1;
         while(index < size && ( arr[index] > arr[getLeft(index)] || arr[index] > arr[getRight(index)] )) {     // bubble down
-            if(arr[getLeft(index)] < arr[getRight(index)]) {
+            if( getLeft(index) <= size && arr[getLeft(index)] < arr[getRight(index)]) {
                 int temp = arr[index];
                 arr[index] = arr[getLeft(index)];
                 arr[getLeft(index)] = temp;
                 index = getLeft(index);
             }
-            else {
+            else if ( getRight(index) <= size && arr[getRight(index)] < arr[getLeft(index)]) {
                 int temp = arr[index];
                 arr[index] = arr[getRight(index)];
                 arr[getRight(index)] = temp;
                 index = getRight(index);
             }
+            else
+                break;  // heap property is restored
         }
 
         return res;
     }
 
-    void print() {
+    private int[] resizeArr(int[] arr) {
+        int[] newArr = new int[size * 2];
+        for(int i = 0; i < arr.length; i++) 
+            newArr[i] = arr[i];
+        return newArr;
+    }
+
+    public int[] heapSort(int[] unsortedArr) {
+        int[] sorted = new int[unsortedArr.length];
+        Heap heap = new Heap();
+        for(Integer n : unsortedArr)
+            heap.insert(n);
+        for(int i = 0; i < sorted.length; i++)
+            sorted[i] = heap.remove();
+        return sorted;
+    }
+
+    public static void print1DArray(int[] arr) {
         for(Integer n: arr)
             System.out.print(n + " ");
         System.out.println();
@@ -63,22 +88,13 @@ public class Heap {
 
     public static void main(String[] args) {
 
-        Heap heap = new Heap();
-        heap.insert(5);
-        heap.insert(7);
-        heap.insert(1);
-        heap.insert(3);
-        heap.insert(2);
-        heap.print();
+        int[] arr = new int[]{10, 15, 13, 1, 3, 5, 9, 7, 8, 6, 2, 4, 14, 12, 11};
+        print1DArray(arr);
 
-        while( !heap.isEmpty() ) 
-            System.out.println(heap.remove());
+        arr = new Heap().heapSort( arr );
+
+        print1DArray(arr);
+
     }
-
-
-    //       1
- 	//   2      3
- 	// 4   5  6   7 
-
 
 }
