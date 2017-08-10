@@ -26,14 +26,11 @@ public class Heap {
     void insert(int val) {
         if(size == arr.length - 1)  
             arr = resizeArr(arr);
-
     	arr[++size] = val;         
 
     	int index = size;
     	while( index > 0 && arr[index] < arr[ getParent(index) ] ) {   // bubble up
-    		int temp = arr[ getParent(index) ];
-            arr[ getParent(index) ] = arr[index];
-            arr[index] = temp;
+    		swap(index, getParent(index));
             index = getParent(index);
     	}
     }
@@ -72,7 +69,7 @@ public class Heap {
         return newArr;
     }
 
-    int[] heapSort(int[] unsortedArr) {
+    static int[] heapSort(int[] unsortedArr) {
         int[] sorted = new int[unsortedArr.length];
         Heap tempHeap = new Heap();
         for(Integer n : unsortedArr)
@@ -91,10 +88,7 @@ public class Heap {
     public static void main(String[] args) {
         int[] arr = new int[]{10, 15, 13, 1, 3, 5, 9, 7, 8, 6, 2, 4, 14, 12, 11};
         print1DArray(arr);
-
-        arr = new Heap().heapSort( arr );
-
+        arr = Heap.heapSort( arr );
         print1DArray(arr);
     }
-
 }
