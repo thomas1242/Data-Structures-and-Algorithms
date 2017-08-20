@@ -4,7 +4,7 @@ Test: Test.o
 	g++ -o Test Test.o
 	./Test
 
-Test.o: Test.cpp SinglyLinkedList.h LinearList.h
+Test.o: Test.cpp LinkedList.h LinearList.h
 
 clean:
 	rm *.o Test
