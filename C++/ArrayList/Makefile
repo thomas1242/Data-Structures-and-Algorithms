@@ -1,9 +1,10 @@
-all: TestArrayList
+all: Test
 
-TestArrayList: Test.o
-	g++ -o TestArrayList Test.o
+Test: Test.o
+	g++ -o Test Test.o
+	./Test
 
 Test.o: Test.cpp ArrayList.h LinearList.h
 
 clean:
-	rm *.o TestArrayList
+	rm *.o Test

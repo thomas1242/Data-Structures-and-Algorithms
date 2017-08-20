@@ -18,34 +18,29 @@ void resize1DArray(T *& arr, int oldLength, int newLength) {
 
 template <class T>
 class ArrayList : public LinearList<T> {
-	public: 
-		// constructor and destructor
-		ArrayList();
-		~ArrayList();
 
-		// inherited virtual methods
-		bool isEmpty() const;	// illegal to write to class member data
-		int size() const;		// pure virtual function has no implementation
-		T& get(int index) const;
-		void remove(int index);
+	public: 
+		ArrayList(int initCapacity = 10);	
+		~ArrayList();	
+		T& get(int index) const;	// inherited abstract methods
 		void append(const T& theElement);
 		void insert(int index, const T& theElement);
-
-		// additional methods
-		void print();
+		void remove(int index);
+		bool isEmpty() const;	
+		int size() const;	
+		string to_string() const;	
 
 	private:
 		T * arr;	// 1D array 
-		int sizee;
-		int arrLength;
+		int _size;
+		int length;
 };
 
-// constructor
 template<class T>
-ArrayList<T>::ArrayList() {
-	sizee = 0;
-	arrLength = 8;
-	arr = new T[8];
+ArrayList<T>::ArrayList(int initCapacity) {
+	_size = 0;
+	length = initCapacity;
+	arr = new T[initCapacity];
 }
 
 template<class T>
@@ -54,61 +49,62 @@ ArrayList<T>::~ArrayList() {
 }
 
 template<class T>
+string ArrayList<T>::to_string() const{
+	string res;
+	for(int i = 0; i < _size; i++) 
+		res += std::to_string(arr[i]) + " ";
+	return res + '\n';
+}
+
+template<class T>
 T& ArrayList<T>::get(int index) const {
-	if(index < 0 || index >= sizee)
+	if(index < 0 || index >= _size)
 		throw runtime_error("ArrayList.get(): Invalid position");
 	return arr[index];
 }
 
 template<class T>
 void ArrayList<T>::insert(int index, const T& theElement) {
-	if(index < 0 || index > sizee)
+	if(index < 0 || index > _size)
 		throw runtime_error("ArrayList.insert(): Invalid position");
 
-	if(sizee == arrLength) {
-		resize1DArray(arr, arrLength, arrLength * 2);
-		arrLength *= 2;
+	if(_size == length) {
+		resize1DArray(arr, length, length * 2);
+		length *= 2;
 	}
 
-	for(int i = arrLength - 1; i > index; i--) 
+	for(int i = length - 1; i > index; i--) 
 		arr[i] = arr[i - 1];
 	arr[index] = theElement;
-	sizee++;
+	_size++;
 }
 
 template<class T>
 void ArrayList<T>::remove(int index) {
-	if(index < 0 || index >= sizee)
+	if(index < 0 || index >= _size)
 		throw runtime_error("ArrayList.remove(): Invalid position");
-	for(int i = index + 1; i < sizee; i++) 
+	for(int i = index + 1; i < _size; i++) 
 		arr[i - 1] = arr[i];
-	sizee--;
+	_size--;
 }
 
 template<class T>
 void ArrayList<T>::append(const T& theElement) {
-	if(sizee == arrLength) {
-		resize1DArray(arr, arrLength, arrLength * 2);
-		arrLength *= 2;
+	if(_size == length) {
+		resize1DArray(arr, length, length * 2);
+		length *= 2;
 	}
-	arr[sizee++] = theElement;
+	arr[_size++] = theElement;
 }
 
 template<class T>
 bool ArrayList<T>::isEmpty() const {
-	return sizee == 0;
+	return _size == 0;
 }
 
 template<class T>
 int ArrayList<T>::size() const {
-	return sizee;
-}
-
-template<class T>
-void ArrayList<T>::print() {
-	for(int i = 0; i < sizee; i++) 
-		cout << arr[i] << " ";
-	cout << endl;
+	return _size;
 }
 
 #endif
