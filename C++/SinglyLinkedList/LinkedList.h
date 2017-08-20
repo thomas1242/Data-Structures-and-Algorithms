@@ -10,17 +10,22 @@ class LinkedList {
 
     // visibility will default to private
 	struct Node {
-	   	public:
 	        T data;
-	        Node* next;
+	        Node * next;
+
 	       	Node(T d) {
 	       		data = d;
 	       		next = NULL;
-	    }
+	    	}
+	    	Node(Node *& node) {
+	       		data = node->data;
+	       		next = NULL;
+	       	}
 	};
 
 	public: 
 		LinkedList();	
+		LinkedList(LinkedList<T> & list);
 		~LinkedList();	
 		T& get(int index) const;	// inherited pure virtual functions
 		void append(const T& theElement);
@@ -31,6 +36,7 @@ class LinkedList {
 		T& pop();				  	// additional methods
 		void print() const;	
 		void reverse();
+		typename LinkedList<T>::Node * firstNode();
 
 	private:
 		LinkedList<T>::Node * head;	// pointer to start of 1D array 
@@ -53,6 +59,29 @@ LinkedList<T>::~LinkedList() {
 		head = next;
 	}
 }
+
+template <class T>
+LinkedList<T>::LinkedList(LinkedList<T> & list) {
+	if(list.firstNode() == NULL)
+		return;
+
+	LinkedList<T>::Node * sourceNode = list.firstNode();
+	head = new Node(sourceNode);
+
+	LinkedList<T>::Node * temp = head;
+
+	while(sourceNode->next != NULL) {
+		temp->next = new Node(sourceNode->next);
+		temp = temp->next;
+		sourceNode = sourceNode->next;
+	}
+}
+
+template <class T>
+typename LinkedList<T>::Node * LinkedList<T>::firstNode() {
+	return head;
+}
+
 
 template <class T>
 T& LinkedList<T>::get(int index) const {
