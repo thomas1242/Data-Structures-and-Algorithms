@@ -64,7 +64,7 @@ T& SinglyLinkedList<T>::get(int index) const {
 		return head->data;
 
 	Node<T> * temp = head;
-	for(int i = 0; i < index - 1; i++)
+	for(int i = 0; i < index; i++)
 		temp = temp->next;
 
 	return temp->data;
@@ -74,11 +74,29 @@ T& SinglyLinkedList<T>::get(int index) const {
 template <class T>
 T& SinglyLinkedList<T>::pop() {
 	if (head == NULL) 
-		throw std::runtime_error("Cannor pop() : empty list");
+		throw std::runtime_error("pop() : empty list");
 	else {
 		Node<T> * temp = head;
 		head = head->next;
 		return temp->data;
+	}
+}
+
+template <class T>
+void SinglyLinkedList<T>::insert(int index, const T& theElement) {
+	if(index < 0 || index > getLength(head))
+		throw std::runtime_error("index out of bounds");
+
+	if(index == 0) {
+		head = new Node<T>(theElement);
+	}
+	else {
+		Node<T> * temp = head;
+		for(int i = 0; i < index - 1; i++)
+			temp = temp->next;
+		Node<T> * newNode = new Node<T>(theElement);
+		newNode->next = temp->next;
+		temp->next = newNode;
 	}
 }
 
@@ -91,6 +109,25 @@ void SinglyLinkedList<T>::append(const T& theElement) {
 		while(temp->next != NULL)
 			temp = temp->next;
 		temp->next = new Node<T>(theElement);
+	}
+}
+
+template <class T>
+void SinglyLinkedList<T>::remove(int index) {
+	if(index < 0 || index >= getLength(head))
+		throw std::runtime_error("index out of bounds");
+	if(index == 0) {
+		Node<T> * del = head;
+		head = head->next;
+		delete del;
+	}
+	else {
+		Node<T> * temp = head;
+		for(int i = 0; i < index - 1; i++)
+			temp = temp->next;
+		Node<T> * delNode = temp->next;
+		temp->next = temp->next->next;;
+		delete delNode;
 	}
 }
 
