@@ -32,14 +32,15 @@ class ArrayList : public LinearList<T> {
 
 	private:
 		T * arr;	// 1D array 
-		int _size;
-		int length;
+		int listLength;
+		int arrayLength;
+		
 };
 
 template<class T>
 ArrayList<T>::ArrayList(int initCapacity) {
-	_size = 0;
-	length = initCapacity;
+	listLength = 0;
+	arrayLength = initCapacity;
 	arr = new T[initCapacity];
 }
 
@@ -49,62 +50,62 @@ ArrayList<T>::~ArrayList() {
 }
 
 template<class T>
-string ArrayList<T>::to_string() const{
-	string res;
-	for(int i = 0; i < _size; i++) 
-		res += std::to_string(arr[i]) + " ";
-	return res + '\n';
-}
-
-template<class T>
 T& ArrayList<T>::get(int index) const {
-	if(index < 0 || index >= _size)
+	if(index < 0 || index >= listLength)
 		throw runtime_error("ArrayList.get(): Invalid position");
 	return arr[index];
 }
 
 template<class T>
 void ArrayList<T>::insert(int index, const T& theElement) {
-	if(index < 0 || index > _size)
+	if(index < 0 || index > listLength)
 		throw runtime_error("ArrayList.insert(): Invalid position");
 
-	if(_size == length) {
-		resize1DArray(arr, length, length * 2);
-		length *= 2;
+	if(listLength == arrayLength) {
+		resize1DArray(arr, arrayLength, arrayLength * 2);
+		arrayLength *= 2;
 	}
 
-	for(int i = length - 1; i > index; i--) 
+	for(int i = arrayLength - 1; i > index; i--) 
 		arr[i] = arr[i - 1];
 	arr[index] = theElement;
-	_size++;
+	listLength++;
 }
 
 template<class T>
 void ArrayList<T>::remove(int index) {
-	if(index < 0 || index >= _size)
+	if(index < 0 || index >= listLength)
 		throw runtime_error("ArrayList.remove(): Invalid position");
-	for(int i = index + 1; i < _size; i++) 
+	for(int i = index + 1; i < listLength; i++) 
 		arr[i - 1] = arr[i];
-	_size--;
+	listLength--;
 }
 
 template<class T>
 void ArrayList<T>::append(const T& theElement) {
-	if(_size == length) {
-		resize1DArray(arr, length, length * 2);
-		length *= 2;
+	if(listLength == arrayLength) {
+		resize1DArray(arr, arrayLength, arrayLength * 2);
+		arrayLength *= 2;
 	}
-	arr[_size++] = theElement;
+	arr[listLength++] = theElement;
+}
+
+template<class T>
+string ArrayList<T>::to_string() const{
+	string res;
+	for(int i = 0; i < listLength; i++) 
+		res += std::to_string(arr[i]) + " ";
+	return res + '\n';
 }
 
 template<class T>
 bool ArrayList<T>::isEmpty() const {
-	return _size == 0;
+	return listLength == 0;
 }
 
 template<class T>
 int ArrayList<T>::size() const {
-	return _size;
+	return listLength;
 }
 
 #endif
