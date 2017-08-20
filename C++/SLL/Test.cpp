@@ -1,15 +1,26 @@
 #include <iostream>
-// #include "ArrayList.h"
+#include "SinglyLinkedList.h"
 
 int main() {
-	// ArrayList<int> * list = new ArrayList<int>();
+	SinglyLinkedList<int> * list = new SinglyLinkedList<int>();
 
 	bool res = true;
 
-	// list->append(1);
-	// list->append(3);
-	// list->append(5);
-	// list->append(7);
+	list->append(1);
+	list->append(3);
+	list->append(5);
+	list->append(7);
+
+	cout << list->size() << endl;
+	list->print();
+	list->reverse();
+	list->print();
+
+
+	while( !list->isEmpty() ) {
+		list->print();
+		list->pop();
+	}
 	// res &= list->get(0) == 1;
 	// res &= list->get(2) == 5;
 
