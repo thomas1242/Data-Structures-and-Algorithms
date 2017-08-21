@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include <string>
+#include "LinearList.h"
 using namespace std;
 
 template <class T>
-class LinkedList {
+class LinkedList : public LinearList<T> {
 
     // visibility will default to private
 	struct Node {
