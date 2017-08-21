@@ -7,12 +7,11 @@
 using namespace std;
 
 template <class T>
-class LinkedQueue {
+class LinkedQueue : public Queue<T> {
 
 	struct Node {
 	        T data;
 	        Node * next;
-
 	       	Node(T d) {
 	       		data = d;
 	       		next = NULL;
