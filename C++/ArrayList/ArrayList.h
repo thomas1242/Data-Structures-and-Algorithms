@@ -22,7 +22,7 @@ class ArrayList : public LinearList<T> {
 	public: 
 		ArrayList(int initCapacity = 10);	
 		~ArrayList();	
-		T& get(int index) const;	// inherited abstract methods
+		T& get(int index) const;	// inherited vritual functions
 		void append(const T& theElement);
 		void insert(int index, const T& theElement);
 		void remove(int index);
@@ -31,7 +31,7 @@ class ArrayList : public LinearList<T> {
 		string to_string() const;	
 
 	private:
-		T * arr;	// 1D array 
+		T * arr;			// pointer to 1D array 
 		int listLength;
 		int arrayLength;
 		
@@ -94,7 +94,7 @@ template<class T>
 string ArrayList<T>::to_string() const{
 	string res;
 	for(int i = 0; i < listLength; i++) 
-		res += std::to_string(arr[i]) + " ";
+		res += to_string(arr[i]) + " ";
 	return res + '\n';
 }
 
