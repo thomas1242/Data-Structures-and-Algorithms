@@ -21,6 +21,15 @@ int main() {
 	q->add(3);
 	res &= q->size() == 1;
 
+	while( !q->isEmpty() )
+		q->pop();
+
+	for(int i = 0; i < 5; i++)
+		q->add(i);
+
+	res &= q->size() == 5;
+
+
 	if(res)	std::cout << "\033[1;32mPASS\033[0m" << std::endl;
 	else 	std::cout << "\033[1;31mFAIL\033[0m" << std::endl;
 
