@@ -11,7 +11,6 @@ class Stack {
 		virtual T& top() const = 0;
 		virtual void pop() = 0;
 		virtual void push(const T& theElement) = 0;
-
 };
 
 #endif
