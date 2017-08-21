@@ -1,3 +1,5 @@
+CXXFLAGS = -std=c++11
+
 all: Main
 
 Main: Main.o
