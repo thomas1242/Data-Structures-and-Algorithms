@@ -1,17 +1,17 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include "Pair.h"
+
 template <class K, class V>
 struct Node {
-		K key;
-		V val;
+		Pair<K, V> pair;
 		Node * next;
 		Node() {
 			next = NULL;
 		}
-		Node(K k, V v) {
-			key = k;
-			val = v;
+		Node(const Pair<K, V> & p) {
+			pair = p;
 			next = NULL;
 		}
 };
