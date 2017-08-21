@@ -10,7 +10,7 @@ class HashMap : public Map<K, V> {
 		HashMap();
 		~HashMap();
 		int size() const;
-		V* find(const K& k);
+		V* find(const K& k) const;
 		void insert(const K& key, const V& val);
 		void erase(const K& key);
 
@@ -56,7 +56,7 @@ void HashMap<K, V>::insert(const K& key, const V& val) {
 }
 
 template <class K, class V>
-V* HashMap<K, V>::find(const K& key) {
+V* HashMap<K, V>::find(const K& key) const {
 	int bucket = (int) std::hash<K>()(key) % arrLength;
 
 	Node<K, V> * temp = buckets[bucket];
@@ -93,7 +93,11 @@ void HashMap<K, V>::erase(const K& key) {
 
 template <class K, class V>
 int HashMap<K, V>::size() const {
-	return 0;
+	int sum = 0;
+	for(int i = 0; i < arrLength; i++) 
+		if(buckets[i] != NULL)
+			sum += buckets[i]->length();
+	return sum;
 }
 
 

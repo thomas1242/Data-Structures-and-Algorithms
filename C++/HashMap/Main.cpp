@@ -14,6 +14,7 @@ int main() {
 	hashMap_ptr->insert(3, "three");
 	hashMap_ptr->insert(2, "two");
 	res &= *hashMap_ptr->find(7) == "seven";
+	res &= hashMap_ptr->size() == 4;
 
 	hashMap_ptr->erase(7);
 	res &= hashMap_ptr->find(7) == NULL;
@@ -22,8 +23,16 @@ int main() {
 	hashMap_ptr->insert(7, "ten");			// erase any existing <K, V> pair 
 	res &= *hashMap_ptr->find(7) == "ten";
 
+
+	HashMap<string, int> * map = new HashMap<string, int>();
+	map->insert("one" , 1);
+	map->insert("one" , *map->find("one") + 1);
+	res &= *map->find("one") == 2;
+
+
 	if(res)	std::cout << "\033[1;32mPASS\033[0m" << std::endl;
 	else 	std::cout << "\033[1;31mFAIL\033[0m" << std::endl;
+
 
 	hashMap_ptr->~HashMap();	
 	
