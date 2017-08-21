@@ -7,7 +7,7 @@
 using namespace std;
 
 template <class T>
-class LinkedStack {
+class LinkedStack : Stack<T> {
 
 	struct Node {
 	        T data;

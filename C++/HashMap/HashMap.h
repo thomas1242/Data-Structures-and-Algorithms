@@ -3,6 +3,8 @@
 
 #include "Map.h"
 #include "Node.h"
+#include <iostream>
+#include <functional>
 
 template <class K, class V>
 class HashMap : public Map<K, V> {
@@ -17,6 +19,7 @@ class HashMap : public Map<K, V> {
 	private:
 		Node<K, V> ** buckets;	// pointer to adjacency list
 		int arrLength;
+		std::hash<K> hash_fn;
 };
 
 template <class K, class V>
@@ -38,7 +41,7 @@ template <class K, class V>
 void HashMap<K, V>::insert(const K& key, const V& val) {
 	Pair<K, V> p(key, val);
 
-	int bucket = (int) std::hash<K>()(key) % arrLength;
+	int bucket = (int) hash_fn(key) % arrLength;
 
 	if(buckets[bucket] == NULL)
 		buckets[bucket] = new Node<K, V>(p);
@@ -57,7 +60,7 @@ void HashMap<K, V>::insert(const K& key, const V& val) {
 
 template <class K, class V>
 V* HashMap<K, V>::find(const K& key) const {
-	int bucket = (int) std::hash<K>()(key) % arrLength;
+	int bucket = (int) hash_fn(key) % arrLength;
 
 	Node<K, V> * temp = buckets[bucket];
 	while(temp != NULL && temp->pair.first != key)
@@ -70,7 +73,7 @@ V* HashMap<K, V>::find(const K& key) const {
 
 template <class K, class V>
 void HashMap<K, V>::erase(const K& key) {
-	int bucket = (int) std::hash<K>()(key) % arrLength;
+	int bucket = (int) hash_fn(key) % arrLength;
 
 	Node<K, V> * temp = buckets[bucket];
 

@@ -11,7 +11,6 @@ class Queue {
 		virtual T& front() const = 0;
 		virtual void pop() = 0;
 		virtual void add(const T& theElement) = 0;
-
 };
 
 #endif
