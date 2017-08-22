@@ -33,7 +33,7 @@ class BinarySearchTree {
 };
 
 void BinarySearchTree::insert(const int & data) {
-	insert(root, data);
+	root = insert(root, data);
 }
 
 Node * BinarySearchTree::insert(Node * node, const int & data) {
@@ -44,10 +44,12 @@ Node * BinarySearchTree::insert(Node * node, const int & data) {
 		root->left = insert(root->left, data);
 	else 
 		root->right = insert(root->right, data);
+
+	return node;
 }
 
 BinarySearchTree::BinarySearchTree() {
-	root = new Node();
+	root = NULL;
 }
 
 BinarySearchTree::~BinarySearchTree() {
