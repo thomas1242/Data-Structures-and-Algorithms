@@ -24,7 +24,7 @@ class Trie {
 		Trie();
 		~Trie();
 		void insertWord(const std::string & word);
-		bool contains(const std::string & word) const;
+		bool containsWord(const std::string & word) const;
 		void printAll() const;
 
 	private:
@@ -47,7 +47,7 @@ void Trie::printAll(const Node * node, std::string prefix) const {
 	prefix = prefix + node->c;	// update prefix associated with this node
 
 	if(node->isWord == true)
-		std::cout << prefix << std::endl;
+		std::cout << prefix << ", ";
 
 	for(int i = 0; i < 26; i++) 
 		printAll(node->children[i], prefix);
@@ -71,7 +71,7 @@ void Trie::insertWord(const std::string & word) {
 }
 
 
-bool Trie::contains(const std::string & word) const {
+bool Trie::containsWord(const std::string & word) const {
 
 	Node * temp = root;
 	for(int i = 0; i < word.length(); i++) {
