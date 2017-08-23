@@ -1,11 +1,13 @@
 #ifndef BST_H
 #define BST_H
 #include <iostream>
+#include "LinkedQueue.h"
 
 struct Node {
 	int data;
 	Node * left = nullptr;
 	Node * right = nullptr;
+	Node() {}
 	Node(int data) {
 		this->data = data;
 	}
@@ -23,6 +25,8 @@ class BinarySearchTree {
 		void inorder() const;
 		void preorder() const;
 		void postorder() const;
+		void levelorder() const;
+		
 	private:
 		Node * root;
 		Node * insert(Node *& node, const int & data);
@@ -34,7 +38,6 @@ class BinarySearchTree {
 		void inorder(const Node * node) const;
 		void preorder(const Node * node) const;
 		void postorder(const Node * node) const;
-
 };
 
 BinarySearchTree::BinarySearchTree() {
@@ -169,6 +172,32 @@ void BinarySearchTree::postorder(const Node * node) const {
 	postorder(node->right);
 	std::cout << node->data << " ";
 }
+
+void BinarySearchTree::levelorder() const {
+	std::cout << "Levelorder traversal: ";
+	
+	if(root == nullptr)
+		return;
+		
+	Queue<Node> * q = new LinkedQueue<Node>();
+	q->add( *root );
+	
+	while( !q->isEmpty() ) {
+		
+		Node curr = q->front();	
+		q->pop();
+		
+		std::cout << curr.data << " "; 
+		
+		if(curr.left != nullptr)
+			q->add( *curr.left );
+		if(curr.right != nullptr)
+			q->add( *curr.right );
+	}
+	
+	std::cout << std::endl;
+}
+
 
 int BinarySearchTree::size() const {
 	return size(root);

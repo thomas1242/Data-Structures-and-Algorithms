@@ -16,6 +16,7 @@ int main() {
 	bst->inorder();
 	bst->preorder();
 	bst->postorder();
+	bst->levelorder();
 				
 	res &= bst->contains(1);
 	res &= bst->contains(10);
