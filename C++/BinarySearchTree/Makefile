@@ -1,5 +1,5 @@
 all:
-	g++ -o Main Main.cpp 
+	g++ -std=c++11 -o Main Main.cpp 
 	./Main
 
 clean:
