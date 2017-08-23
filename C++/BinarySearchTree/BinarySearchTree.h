@@ -5,11 +5,16 @@
 
 struct Node {
 	int data;
-	Node * left = nullptr;
-	Node * right = nullptr;
-	Node() {}
+	Node * left;
+	Node * right;
+	Node() {
+		left = nullptr;
+		right = nullptr;
+	}
 	Node(int data) {
 		this->data = data;
+		left = nullptr;
+		right = nullptr;
 	}
 };
 
@@ -34,10 +39,11 @@ class BinarySearchTree {
 		bool contains(Node * node, const int & data) const;
 		int getMin(const Node * node) const;
 		int size(const Node * node) const;
-		void deleteTree(Node *& node);
 		void inorder(const Node * node) const;
 		void preorder(const Node * node) const;
 		void postorder(const Node * node) const;
+		void deleteTree(Node *& node);
+
 };
 
 BinarySearchTree::BinarySearchTree() {
@@ -49,17 +55,11 @@ BinarySearchTree::~BinarySearchTree() {
 }
 
 void BinarySearchTree::deleteTree(Node *& node) {
-	if(node == nullptr)
-		return;
-		
-	Node * left = node->left;
-	Node * right = node->right;
-	
+	if(node == nullptr) return;
+	deleteTree(node->left);
+	deleteTree(node->right);
 	delete node;
 	node = nullptr;
-	
-	deleteTree(left);
-	deleteTree(right);
 }
 
 bool BinarySearchTree::contains(const int & data) const {
@@ -101,7 +101,7 @@ void BinarySearchTree::remove(const int & data) {
 Node * BinarySearchTree::remove(Node *& node, const int & data) {
 	if(node == nullptr)	// data not found
 		return nullptr;	
-			
+	
 	if(data < node->data) 
 		node->left = remove(node->left, data);
 	else if (data > node->data) 
@@ -117,15 +117,15 @@ Node * BinarySearchTree::remove(Node *& node, const int & data) {
 			node->data = min;
 		}
 	}
-		
+	
 	return node;		// return updated node
 }
 
 int BinarySearchTree::getMin(const Node * node) const {
-		if(node->left == nullptr)
-			return node->data;
-		else
-			return getMin(node->left);
+	if(node->left == nullptr)
+		return node->data;
+	else
+		return getMin(node->left);
 }
 
 void BinarySearchTree::inorder() const {
@@ -137,7 +137,6 @@ void BinarySearchTree::inorder() const {
 void BinarySearchTree::inorder(const Node * node) const {
 	if(node == nullptr)
 		return;
-
 	inorder(node->left);
 	std::cout << node->data << " ";
 	inorder(node->right);
@@ -152,7 +151,6 @@ void BinarySearchTree::preorder() const {
 void BinarySearchTree::preorder(const Node * node) const {
 	if(node == nullptr)
 		return;
-
 	std::cout << node->data << " ";
 	preorder(node->left);
 	preorder(node->right);
@@ -167,7 +165,6 @@ void BinarySearchTree::postorder() const {
 void BinarySearchTree::postorder(const Node * node) const {
 	if(node == nullptr)
 		return;
-
 	postorder(node->left);
 	postorder(node->right);
 	std::cout << node->data << " ";
