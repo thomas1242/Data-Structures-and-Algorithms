@@ -3,7 +3,7 @@
 
 int main() {
 
-	BinarySearchTree * bst = new BinarySearchTree();	
+	BinarySearchTree<int> * bst = new BinarySearchTree<int>();	
 	
 	bool res = true;			// test BST API
 
