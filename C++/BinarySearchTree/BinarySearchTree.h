@@ -3,16 +3,22 @@
 #include <iostream>
 #include "LinkedQueue.h"
 
+
 template <class T>
 class BinarySearchTree {
 
 	struct Node {
 		T data;
-		Node * left = nullptr;
-		Node * right = nullptr;
-		Node() {}
+		Node * left;
+		Node * right;
+		Node() {
+			left = nullptr;
+			right = nullptr;
+		}
 		Node(T data) {
 			this->data = data;
+			left = nullptr;
+			right = nullptr;
 		}
 	};
 
@@ -53,17 +59,12 @@ BinarySearchTree<T>::~BinarySearchTree() {
 
 template <class T>
 void BinarySearchTree<T>::deleteTree(BinarySearchTree<T>::Node *& node) {
-	if(node == nullptr)
+	if(node == nullptr) 
 		return;
-		
-	BinarySearchTree<T>::Node * left = node->left;
-	BinarySearchTree<T>::Node * right = node->right;
-	
+	deleteTree(node->left);
+	deleteTree(node->right);
 	delete node;
 	node = nullptr;
-	
-	deleteTree(left);
-	deleteTree(right);
 }
 
 template <class T>
@@ -111,7 +112,7 @@ template <class T>
 typename BinarySearchTree<T>::Node * BinarySearchTree<T>::remove(BinarySearchTree<T>::Node *& node, const int & data) {
 	if(node == nullptr)	// data not found
 		return nullptr;	
-			
+	
 	if(data < node->data) 
 		node->left = remove(node->left, data);
 	else if (data > node->data) 
@@ -127,7 +128,7 @@ typename BinarySearchTree<T>::Node * BinarySearchTree<T>::remove(BinarySearchTre
 			node->data = min;
 		}
 	}
-		
+	
 	return node;		// return updated node
 }
 
@@ -150,7 +151,6 @@ template <class T>
 void BinarySearchTree<T>::inorder(const BinarySearchTree<T>::Node * node) const {
 	if(node == nullptr) 
 		return;
-
 	inorder(node->left);
 	std::cout << node->data << " ";
 	inorder(node->right);
@@ -167,7 +167,6 @@ template <class T>
 void BinarySearchTree<T>::preorder(const BinarySearchTree<T>::Node * node) const {
 	if(node == nullptr) 
 		return;
-
 	std::cout << node->data << " ";
 	preorder(node->left);
 	preorder(node->right);
@@ -184,7 +183,6 @@ template <class T>
 void BinarySearchTree<T>::postorder(const BinarySearchTree<T>::Node * node) const {
 	if(node == nullptr) 
 		return;
-
 	postorder(node->left);
 	postorder(node->right);
 	std::cout << node->data << " ";
