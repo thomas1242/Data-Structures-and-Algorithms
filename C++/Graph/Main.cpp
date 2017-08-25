@@ -11,8 +11,8 @@ int main() {
 	graph1->addEdge(9, 5);
 	graph1->addEdge(9, 15);
 	graph1->addEdge(15, 20);
-
-	Graph<std::string> * graph2 = new Graph<std::string>();	
+	
+	Graph<const char *> * graph2 = new Graph<const char *>();	
 	graph2->addEdge("one", "five");
 	graph2->addEdge("one", "three");
 	graph2->addEdge("one", "nine");
@@ -21,12 +21,10 @@ int main() {
 	graph2->addEdge("nine", "fifteen");
 	graph2->addEdge("fifteen", "twenty");
 
-
-
 	bool res = true;
 
-	res &= graph1->DFS(1, 15);
-	// res &= graph2->DFS("one", "twenty");
+	res &= graph1->DFS(1, 20);
+	res &= graph2->DFS("one", "twenty");
 	
 	if(res)	std::cout << "\033[1;32mPASS\033[0m" << std::endl;
 	else 	std::cout << "\033[1;31mFAIL\033[0m" << std::endl;
