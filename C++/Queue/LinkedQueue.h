@@ -12,21 +12,15 @@ class LinkedQueue : public Queue<T> {
 	struct Node {
 	        T data;
 	        Node * next;
-	       	Node(T d) {
-	       		data = d;
-	       		next = NULL;
-	    	}
-	    	Node(Node *& node) {
-	       		data = node->data;
-	       		next = NULL;
-	       	}
+	       	Node(T d) : data(d) {}
+	    	Node(Node *& node) : Node( node->data ) {}
 	};
 
 	public: 
-		LinkedQueue();								// constructor
+		LinkedQueue();					// constructor
 		LinkedQueue(LinkedQueue<T> & copyList);		// copy constructor
-		~LinkedQueue();								// destructor
-		T& front() const;								// Stack API
+		~LinkedQueue();					// destructor
+		T& front() const;				// Stack API
 		void add(const T& theElement);
 		void pop();
 		bool isEmpty() const;
@@ -43,15 +37,15 @@ class LinkedQueue : public Queue<T> {
 
 template <class T>
 LinkedQueue<T>::LinkedQueue() {
-	head = NULL;
-	tail = NULL;
+	head = nullptr;
+	tail = nullptr;
 }
 
 template <class T>
 LinkedQueue<T>::LinkedQueue(LinkedQueue<T> & copyList) {
-	if(copyList.firstNode() == NULL) {
-		head = NULL;
-		tail = NULL;
+	if(copyList.firstNode() == nullptr) {
+		head = nullptr;
+		tail = nullptr;
 		return;
 	}
 
@@ -60,7 +54,7 @@ LinkedQueue<T>::LinkedQueue(LinkedQueue<T> & copyList) {
 
 	LinkedQueue<T>::Node * temp = head;
 
-	while(sourceNode->next != NULL) {
+	while(sourceNode->next != nullptr) {
 		temp->next = new Node(sourceNode->next);
 		temp = temp->next;
 		sourceNode = sourceNode->next;
@@ -70,7 +64,7 @@ LinkedQueue<T>::LinkedQueue(LinkedQueue<T> & copyList) {
 template <class T>
 LinkedQueue<T>::~LinkedQueue() {
 	LinkedQueue<T>::Node * next;
-	while(head != NULL) {
+	while(head != nullptr) {
 		next = head->next;
 		delete head;
 		head = next;
@@ -80,7 +74,7 @@ LinkedQueue<T>::~LinkedQueue() {
 template <class T>
 void LinkedQueue<T>::add(const T& theElement) {
 	LinkedQueue<T>::Node * newNode = new LinkedQueue<T>::Node(theElement);
-	if(head == NULL) {
+	if(head == nullptr) {
 		head = newNode;
 		tail = head;
 	}
@@ -98,8 +92,8 @@ void LinkedQueue<T>::pop() {
 	LinkedQueue<T>::Node * oldHead = head;
 	head = head->next;
 	delete oldHead;
-	if(head == NULL)
-		tail = NULL;
+	if(head == nullptr)
+		tail = nullptr;
 }
 
 template <class T>
@@ -117,7 +111,7 @@ bool LinkedQueue<T>::isEmpty() const {
 
 template<class T>
 int LinkedQueue<T>::size() const {
-	if(head == NULL)
+	if(head == nullptr)
 		return 0;
 	else
 		return getLength( head );
@@ -125,7 +119,7 @@ int LinkedQueue<T>::size() const {
 
 template<class T>
 int LinkedQueue<T>::getLength(LinkedQueue<T>::Node * node) const {
-	if(node == NULL)
+	if(node == nullptr)
 		return 0;
 	else
 		return 1 + getLength( node->next );
