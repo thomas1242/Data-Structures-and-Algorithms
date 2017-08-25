@@ -35,10 +35,14 @@ int main() {
 	*/
 
 	bool res = true;
-	res &= graph1.DFS(1, 20);
+	//res &= graph1.DFS(1, 20);
 	res &= graph2.DFS("one", "twenty");
 
-	graph1.BFS(1, 20);
+	//graph1.clearVisited();
+	graph2.clearVisited();
+
+	//res &= graph1.BFS(1, 20);
+	res &= graph2.BFS("one", "twenty");
 	
 	if(res)	std::cout << "\033[1;32mPASS\033[0m" << std::endl;
 	else 	std::cout << "\033[1;31mFAIL\033[0m" << std::endl;

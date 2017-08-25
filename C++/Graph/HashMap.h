@@ -27,6 +27,7 @@ class HashMap : public Map<K, V> {
 		V* find(const K& key) const;
 		void insert(const K& key, const V& value);
 		void erase(const K& key);
+		V ** getValues();
 
 	private:
 		HashMap<K, V>::Node ** buckets;	// pointer to adjacency list
@@ -128,6 +129,23 @@ int HashMap<K, V>::size() const {
 		sum += len;
 	}
 	return sum;
+}
+
+template <class K, class V>
+V ** HashMap<K, V>::getValues() {
+	V ** vals = new V * [ size() ];
+
+	int n = 0;
+	HashMap<K, V>::Node * curr;
+	for(int i = 0; i < arrLength; i++) {
+		curr = buckets[i];
+		while(curr != NULL) {	
+			vals[n++] = &(curr->value);	
+			curr = curr->next;
+		}
+	}
+	
+	return vals;
 }
 
 

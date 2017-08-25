@@ -22,6 +22,7 @@ class Graph {
 		void addEdge(const T& v1, const T& v2);
 		bool DFS(const T& v1, const T& v2) const;
 		bool BFS(const T& v1, const T& v2) const;
+		void clearVisited();
 		
 	private:
 		HashMap<T, Graph<T>::Node> map;
@@ -46,11 +47,25 @@ void Graph<T>::addEdge(const T& v1, const T& v2) {	// add edge from v1 to v2
 template <class T>
 bool Graph<T>::BFS(const T& v1, const T& v2) const {
 	
-	LinkedQueue<Graph<T>::Node*>  q;
-	//	LinkedQueue< Graph<T>::Node  >  q;
-	
-	//Graph<T>::Node * node = map.find(v1);
-	//node->visited = true;
+	LinkedQueue< Graph<T>::Node* >  q;
+
+	q.add( map.find(v1) );
+	map.find(v1)->visited = true;
+
+	while( !q.isEmpty() ) {
+
+		Graph<T>::Node * curr = q.front();
+		q.pop();
+
+		for(int i = 0; i < curr->adjacent.size(); i++) {
+			if( curr->adjacent.get(i)->visited == false ) {
+				if(curr->adjacent.get(i)->data == v2)
+					return true;
+				q.add( curr->adjacent.get(i) );	
+				curr->adjacent.get(i)->visited = true;		
+			}
+		}
+	}
 
 	return false;
 }
@@ -70,8 +85,14 @@ bool Graph<T>::DFS(const T& v1, const T& v2) const {
 	return false;
 }
 
+template <class T>
+void Graph<T>::clearVisited() {
+	Graph<T>::Node ** vals = map.getValues();
+	int n = map.size();
 
-
+	for(int i = 0; i < n; i++) 
+		vals[i]->visited = false;
+}
 
 
 
