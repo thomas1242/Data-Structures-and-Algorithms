@@ -46,7 +46,8 @@ void Graph<T>::addEdge(const T& v1, const T& v2) {	// add edge from v1 to v2
 template <class T>
 bool Graph<T>::BFS(const T& v1, const T& v2) const {
 	
-	// LinkedQueue< Graph<T>::Node >  q;
+	LinkedQueue<Graph<T>::Node*>  q;
+	//	LinkedQueue< Graph<T>::Node  >  q;
 	
 	//Graph<T>::Node * node = map.find(v1);
 	//node->visited = true;
