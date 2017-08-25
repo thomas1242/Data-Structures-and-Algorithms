@@ -21,6 +21,16 @@ int main() {
 	graph2.addEdge("nine", "fifteen");
 	graph2.addEdge("fifteen", "twenty");
 
+
+	Graph<std::string> graph3;	
+	graph3.addEdge("one", "five");
+	graph3.addEdge("one", "five");
+	graph3.addEdge("one", "nine");
+	graph3.addEdge("five", "nine");
+	graph3.addEdge("nine", "five");
+	graph3.addEdge("nine", "fifteen");
+	graph3.addEdge("fifteen", "twenty");
+
 	bool res = true;
 	res &= graph1.DFS(1, 20);
 	res &= graph2.DFS("one", "twenty");
