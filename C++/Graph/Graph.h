@@ -3,6 +3,7 @@
 #include <iostream>
 #include "HashMap.h"
 #include "LinkedList.h"
+#include "LinkedQueue.h"
 
 template <class T>
 class Graph {
@@ -20,6 +21,7 @@ class Graph {
 		~Graph();
 		void addEdge(const T& v1, const T& v2);
 		bool DFS(const T& v1, const T& v2) const;
+		bool BFS(const T& v1, const T& v2) const;
 		
 	private:
 		HashMap<T, Graph<T>::Node> map;
@@ -42,6 +44,17 @@ void Graph<T>::addEdge(const T& v1, const T& v2) {	// add edge from v1 to v2
 }
 
 template <class T>
+bool Graph<T>::BFS(const T& v1, const T& v2) const {
+	
+	// LinkedQueue< Graph<T>::Node >  q;
+	
+	//Graph<T>::Node * node = map.find(v1);
+	//node->visited = true;
+
+	return false;
+}
+
+template <class T>
 bool Graph<T>::DFS(const T& v1, const T& v2) const {
 	if(v1 == v2)
 		return true;
@@ -55,5 +68,12 @@ bool Graph<T>::DFS(const T& v1, const T& v2) const {
 		
 	return false;
 }
+
+
+
+
+
+
+
 
 #endif
