@@ -3,7 +3,6 @@
 #include <iostream>
 #include "LinkedQueue.h"
 
-
 template <class T>
 class BinarySearchTree {
 
@@ -11,23 +10,17 @@ class BinarySearchTree {
 		T data;
 		Node * left;
 		Node * right;
-		Node() {
-			left = nullptr;
-			right = nullptr;
-		}
-		Node(T data) {
-			this->data = data;
-			left = nullptr;
-			right = nullptr;
-		}
+		Node() : left(nullptr), right(nullptr) {}
+		Node(T data) : data(data), left(nullptr), right(nullptr) {}
 	};
 
 	public:
 		BinarySearchTree();
 		~BinarySearchTree();
-		void insert(const int & data);
-		void remove(const int & data);
-		bool contains(const int & data) const;
+		void insert(const T& data);
+		void remove(const T& data);
+		bool contains(const T& data) const;
+		T& find(const T& data);
 		int size() const;
 		void inorder() const;
 		void preorder() const;
@@ -36,10 +29,11 @@ class BinarySearchTree {
 		
 	private:
 		BinarySearchTree<T>::Node * root;
-		BinarySearchTree<T>::Node * insert(BinarySearchTree<T>::Node *& node, const int & data);
-		BinarySearchTree<T>::Node * remove(BinarySearchTree<T>::Node *& node, const int & data);
-		bool contains(BinarySearchTree<T>::Node * node, const int & data) const;
-		int getMin(const BinarySearchTree<T>::Node * node) const;
+		BinarySearchTree<T>::Node * insert(BinarySearchTree<T>::Node *& node, const T& data);
+		BinarySearchTree<T>::Node * remove(BinarySearchTree<T>::Node *& node, const T& data);
+		T& find(BinarySearchTree<T>::Node *& node, const T& data);
+		bool contains(BinarySearchTree<T>::Node * node, const T& data) const;
+		T getMin(const BinarySearchTree<T>::Node * node) const;
 		int size(const BinarySearchTree<T>::Node * node) const;
 		void deleteTree(BinarySearchTree<T>::Node *& node);
 		void inorder(const BinarySearchTree<T>::Node * node) const;
@@ -68,12 +62,12 @@ void BinarySearchTree<T>::deleteTree(BinarySearchTree<T>::Node *& node) {
 }
 
 template <class T>
-bool BinarySearchTree<T>::contains(const int & data) const {
+bool BinarySearchTree<T>::contains(const T& data) const {
 	return contains(root, data);
 }
 
 template <class T>
-bool BinarySearchTree<T>::contains(BinarySearchTree<T>::Node * node, const int & data) const {
+bool BinarySearchTree<T>::contains(BinarySearchTree<T>::Node * node, const T& data) const {
 	if(node == nullptr)
 		return false;
 			
@@ -86,12 +80,12 @@ bool BinarySearchTree<T>::contains(BinarySearchTree<T>::Node * node, const int &
 }
 
 template <class T>
-void BinarySearchTree<T>::insert(const int & data) {
+void BinarySearchTree<T>::insert(const T& data) {
 	root = insert(root, data);
 }
 
 template <class T>
-typename BinarySearchTree<T>::Node * BinarySearchTree<T>::insert(BinarySearchTree<T>::Node *& node, const int & data) {
+typename BinarySearchTree<T>::Node * BinarySearchTree<T>::insert(BinarySearchTree<T>::Node *& node, const T& data) {
 	if(node == nullptr)
 		return new BinarySearchTree<T>::Node(data);
 			
@@ -104,12 +98,12 @@ typename BinarySearchTree<T>::Node * BinarySearchTree<T>::insert(BinarySearchTre
 }
 
 template <class T>
-void BinarySearchTree<T>::remove(const int & data) {
+void BinarySearchTree<T>::remove(const T& data) {
 	root = remove(root, data);
 }
 
 template <class T>
-typename BinarySearchTree<T>::Node * BinarySearchTree<T>::remove(BinarySearchTree<T>::Node *& node, const int & data) {
+typename BinarySearchTree<T>::Node * BinarySearchTree<T>::remove(BinarySearchTree<T>::Node *& node, const T& data) {
 	if(node == nullptr)	// data not found
 		return nullptr;	
 	
@@ -123,7 +117,7 @@ typename BinarySearchTree<T>::Node * BinarySearchTree<T>::remove(BinarySearchTre
 		else if(node->right == nullptr)
 			return node->left;
 		else {
-			int min = getMin(node->right);
+			T min = getMin(node->right);
 			node->right = remove(node->right, min);
 			node->data = min;
 		}
@@ -133,11 +127,28 @@ typename BinarySearchTree<T>::Node * BinarySearchTree<T>::remove(BinarySearchTre
 }
 
 template <class T>
-int BinarySearchTree<T>::getMin(const BinarySearchTree<T>::Node * node) const {
+T BinarySearchTree<T>::getMin(const BinarySearchTree<T>::Node * node) const {
 	if(node->left == nullptr)
 		return node->data;
 	else
 		return getMin(node->left);
+}
+
+template <class T>
+T& BinarySearchTree<T>::find(const T& data) {
+	return find(root, data);
+}
+
+template <class T>
+T& BinarySearchTree<T>::find(BinarySearchTree<T>::Node *& node, const T& data) {
+	if(node == nullptr) throw std::runtime_error("find(): data not found");
+			
+	if(data < node->data) 
+		return find(node->left, data);
+	else if (data > node->data) 
+		return find(node->right, data);
+	else
+		return node->data;
 }
 
 template <class T>
@@ -195,25 +206,24 @@ void BinarySearchTree<T>::levelorder() const {
 	if(root == nullptr) 
 		return;
 		
-	Queue<BinarySearchTree<T>::Node> * q = new LinkedQueue<BinarySearchTree<T>::Node>();
-	q->add( *root );
+	LinkedQueue<BinarySearchTree<T>::Node> q;
+	q.add( *root );
 	
-	while( !q->isEmpty() ) {
+	while( !q.isEmpty() ) {
 		
-		BinarySearchTree<T>::Node curr = q->front();	
-		q->pop();
+		BinarySearchTree<T>::Node curr = q.front();	
+		q.pop();
 		
 		std::cout << curr.data << " "; 
 		
 		if(curr.left != nullptr)
-			q->add( *curr.left );
+			q.add( *curr.left );
 		if(curr.right != nullptr)
-			q->add( *curr.right );
+			q.add( *curr.right );
 	}
 	
 	std::cout << std::endl;
 }
-
 
 template <class T>
 int BinarySearchTree<T>::size() const {
