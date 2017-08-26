@@ -3,24 +3,24 @@
 #include <iostream>
 #include <string>
 #include "LinearList.h"
-using namespace std;
 
 template<class T>
 void resize1DArray(T *& arr, int oldLength, int newLength) {
 	if(newLength < 0) 
-		throw runtime_error("new length must be >= 0");
-	T * temp = new T[newLength];
+		throw std::runtime_error("new length must be >= 0");
+	T * newArr = new T[newLength];
 	for(int i = 0; i < oldLength; i++)
-		temp[i] = arr[i];
+		newArr[i] = arr[i];
 	delete[] arr;
-	arr = temp;
+	arr = newArr;
 }
 
 template <class T>
 class ArrayList : public LinearList<T> {
 
 	public: 
-		ArrayList(int initCapacity = 10);	
+		ArrayList() : ArrayList(10) {}	
+		ArrayList(int initCapacity);
 		~ArrayList();	
 		T& get(int index) const;	// inherited vritual functions
 		void append(const T& theElement);
@@ -28,7 +28,7 @@ class ArrayList : public LinearList<T> {
 		void remove(int index);
 		bool isEmpty() const;	
 		int size() const;	
-		string to_string() const;	
+		std::string to_string() const;	
 
 	private:
 		T * arr;			// pointer to 1D array 
@@ -38,9 +38,7 @@ class ArrayList : public LinearList<T> {
 };
 
 template<class T>
-ArrayList<T>::ArrayList(int initCapacity) {
-	listLength = 0;
-	arrayLength = initCapacity;
+ArrayList<T>::ArrayList(int initCapacity) : listLength(0), arrayLength(initCapacity) {
 	arr = new T[initCapacity];
 }
 
@@ -52,14 +50,14 @@ ArrayList<T>::~ArrayList() {
 template<class T>
 T& ArrayList<T>::get(int index) const {
 	if(index < 0 || index >= listLength)
-		throw runtime_error("ArrayList.get(): Invalid position");
+		throw std::runtime_error("ArrayList.get(): Invalid position");
 	return arr[index];
 }
 
 template<class T>
 void ArrayList<T>::insert(int index, const T& theElement) {
 	if(index < 0 || index > listLength)
-		throw runtime_error("ArrayList.insert(): Invalid position");
+		throw std::runtime_error("ArrayList.insert(): Invalid position");
 
 	if(listLength == arrayLength) {
 		resize1DArray(arr, arrayLength, arrayLength * 2);
@@ -75,7 +73,7 @@ void ArrayList<T>::insert(int index, const T& theElement) {
 template<class T>
 void ArrayList<T>::remove(int index) {
 	if(index < 0 || index >= listLength)
-		throw runtime_error("ArrayList.remove(): Invalid position");
+		throw std::runtime_error("ArrayList.remove(): Invalid position");
 	for(int i = index + 1; i < listLength; i++) 
 		arr[i - 1] = arr[i];
 	listLength--;
@@ -91,8 +89,8 @@ void ArrayList<T>::append(const T& theElement) {
 }
 
 template<class T>
-string ArrayList<T>::to_string() const{
-	string res;
+std::string ArrayList<T>::to_string() const{
+	std::string res;
 	for(int i = 0; i < listLength; i++) 
 		res += to_string(arr[i]) + " ";
 	return res + '\n';

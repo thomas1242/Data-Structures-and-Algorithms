@@ -1,3 +1,5 @@
+CXXFLAGS = -std=c++11 -Wall
+
 all: Test
 
 Test: Test.o
