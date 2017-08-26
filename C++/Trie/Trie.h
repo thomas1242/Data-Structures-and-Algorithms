@@ -30,6 +30,9 @@ class Trie {
 		void printAll(const Node * node, std::string prefix) const;
 };
 
+Trie::~Trie() {	// TODO : visit each Node and call its destructor
+}
+
 Trie::Trie() {
 	root = new Node(' ');
 }
