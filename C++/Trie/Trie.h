@@ -51,12 +51,10 @@ void Trie::printAll(const Node * node, std::string prefix) const {
 		printAll(node->children[i], prefix);
 }
 
-
-
 void Trie::insertWord(const std::string & word) {
 
 	Node * temp = root;
-	for(int i = 0; i < word.length(); i++) {
+	for(unsigned int i = 0; i < word.length(); i++) {
 		char c = word.at(i);
 		int index = c - 'a';	
 
@@ -68,11 +66,10 @@ void Trie::insertWord(const std::string & word) {
 	temp->isWord = true;
 }
 
-
 bool Trie::containsWord(const std::string & word) const {
 
 	Node * temp = root;
-	for(int i = 0; i < word.length(); i++) {
+	for(unsigned int i = 0; i < word.length(); i++) {
 		char c = word.at(i);
 		int index = c - 'a';	
 
@@ -86,23 +83,6 @@ bool Trie::containsWord(const std::string & word) const {
 	else
 		return false;	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Trie::~Trie() {	// TODO : visit each Node and call its destructor
-}
-
 
 
 #endif
