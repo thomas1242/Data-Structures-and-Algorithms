@@ -12,15 +12,8 @@ class LinkedStack : Stack<T> {
 	struct Node {
 	        T data;
 	        Node * next;
-
-	       	Node(T d) {
-	       		data = d;
-	       		next = NULL;
-	    	}
-	    	Node(Node *& node) {
-	       		data = node->data;
-	       		next = NULL;
-	       	}
+	       	Node(T d) : data(d), next(nullptr) {}
+	    	Node(Node *& node) : Node(node->data) {}
 	};
 
 	public: 
@@ -42,13 +35,13 @@ class LinkedStack : Stack<T> {
 
 template <class T>
 LinkedStack<T>::LinkedStack() {
-	head = NULL;
+	head = nullptr;
 }
 
 template <class T>
 LinkedStack<T>::LinkedStack(LinkedStack<T> & copyList) {
-	if(copyList.firstNode() == NULL) {
-		head = NULL;
+	if(copyList.firstNode() == nullptr) {
+		head = nullptr;
 		return;
 	}
 
@@ -57,7 +50,7 @@ LinkedStack<T>::LinkedStack(LinkedStack<T> & copyList) {
 
 	LinkedStack<T>::Node * temp = head;
 
-	while(sourceNode->next != NULL) {
+	while(sourceNode->next != nullptr) {
 		temp->next = new Node(sourceNode->next);
 		temp = temp->next;
 		sourceNode = sourceNode->next;
@@ -67,7 +60,7 @@ LinkedStack<T>::LinkedStack(LinkedStack<T> & copyList) {
 template <class T>
 LinkedStack<T>::~LinkedStack() {
 	LinkedStack<T>::Node * next;
-	while(head != NULL) {
+	while(head != nullptr) {
 		next = head->next;
 		delete head;
 		head = next;
@@ -106,7 +99,7 @@ bool LinkedStack<T>::isEmpty() const {
 
 template<class T>
 int LinkedStack<T>::size() const {
-	if(head == NULL)
+	if(head == nullptr)
 		return 0;
 	else
 		return getLength( head );
@@ -114,7 +107,7 @@ int LinkedStack<T>::size() const {
 
 template<class T>
 int LinkedStack<T>::getLength(LinkedStack<T>::Node * node) const {
-	if(node == NULL)
+	if(node == nullptr)
 		return 0;
 	else
 		return 1 + getLength( node->next );
@@ -124,5 +117,6 @@ template <class T>
 typename LinkedStack<T>::Node * LinkedStack<T>::firstNode() {
 	return head;
 }
+
 
 #endif
