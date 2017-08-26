@@ -6,15 +6,13 @@
 struct Node {
 	Node ** children;	// pointer to array of child nodes
 	bool isWord;		// does this node mark end of prefix
-	char c;			// character associated with this node
-	Node() {
-		isWord = false;
+	char c;				// character associated with this node
+	
+	Node() : Node(' ') {}
+	Node(char character) : isWord(false), c(character) {
 		children = new Node * [26];
-	}
-	Node(char character) {
-		c = character;
-		isWord = false;
-		children = new Node * [26];
+		for(int i = 0; i < 26; i++) 
+			children[i] = nullptr;
 	}
 };
 
