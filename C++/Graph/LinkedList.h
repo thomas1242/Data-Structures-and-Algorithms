@@ -14,14 +14,8 @@ class LinkedList : public LinearList<T> {
 	        T data;
 	        Node * next;
 
-	       	Node(T d) {
-	       		data = d;
-	       		next = NULL;
-	    	}
-	    	Node(Node *& node) {
-	       		data = node->data;
-	       		next = NULL;
-	       	}
+	       	Node(const T& d) : data(d), next(nullptr) {}
+	    	Node(const Node& node) : data(node.data) {}
 	};
 
 	public: 
@@ -47,14 +41,14 @@ class LinkedList : public LinearList<T> {
 
 template <class T>
 LinkedList<T>::LinkedList() {
-	head = NULL;
-	tail = NULL;
+	head = nullptr;
+	tail = nullptr;
 }
 
 template <class T>
 LinkedList<T>::~LinkedList() {
 	LinkedList<T>::Node * next;
-	while(head != NULL) {
+	while(head != nullptr) {
 		next = head->next;
 		delete head;
 		head = next;
@@ -63,16 +57,17 @@ LinkedList<T>::~LinkedList() {
 
 template <class T>
 LinkedList<T>::LinkedList(LinkedList<T> & list) {
-	if(list.firstNode() == NULL)
+	if(list.firstNode() == nullptr)
 		return;
 
 	LinkedList<T>::Node * sourceNode = list.firstNode();
-	head = new Node(sourceNode);
+	head = new Node( *sourceNode );
+
 
 	LinkedList<T>::Node * temp = head;
 
-	while(sourceNode->next != NULL) {
-		temp->next = new Node(sourceNode->next);
+	while(sourceNode->next != nullptr) {
+		temp->next = new Node( *sourceNode->next );
 		temp = temp->next;
 		sourceNode = sourceNode->next;
 	}
@@ -102,13 +97,13 @@ T& LinkedList<T>::get(int index) const {
 
 template <class T>
 T& LinkedList<T>::pop() {
-	if (head == NULL) 
+	if (head == nullptr) 
 		throw std::runtime_error("pop() : empty list");
 	else {
 		LinkedList<T>::Node * temp = head;
 		head = head->next;
-		if(head == NULL)	// update tail
-			tail = NULL;
+		if(head == nullptr)	// update tail
+			tail = nullptr;
 		return temp->data;
 	}
 }
@@ -130,14 +125,14 @@ void LinkedList<T>::insert(int index, const T& theElement) {
 			temp = temp->next;
 		newNode->next = temp->next;
 		temp->next = newNode;
-		if(newNode->next == NULL)
+		if(newNode->next == nullptr)
 			tail = newNode;
 	}
 }
 
 template <class T>
 void LinkedList<T>::append(const T& theElement) {
-	if(head == NULL) {
+	if(head == nullptr) {
 		head = new LinkedList<T>::Node(theElement);
 		tail = head;
 	}
@@ -168,7 +163,7 @@ void LinkedList<T>::remove(int index) {
 
 template<class T>
 bool LinkedList<T>::isEmpty() const {
-	return head == NULL;
+	return head == nullptr;
 }
 
 template<class T>
@@ -178,7 +173,7 @@ int LinkedList<T>::size() const {
 
 template<class T>
 int LinkedList<T>::getLength(LinkedList<T>::Node * node) const {
-	if(node == NULL)
+	if(node == nullptr)
 		return 0;
 	else
 		return 1 + getLength( node->next );
@@ -187,7 +182,7 @@ int LinkedList<T>::getLength(LinkedList<T>::Node * node) const {
 template<class T>
 void LinkedList<T>::print() const {
 	LinkedList<T>::Node * temp = head;
-	while(temp != NULL) {
+	while(temp != nullptr) {
 		cout << temp << " ";
 		temp = temp->next;
 	}
@@ -197,9 +192,9 @@ void LinkedList<T>::print() const {
 template<class T>
 void LinkedList<T>::reverse() {
 	LinkedList<T>::Node * curr = head;
-	LinkedList<T>::Node * prev = NULL;
-	LinkedList<T>::Node * next = NULL;
-	while(curr != NULL) {
+	LinkedList<T>::Node * prev = nullptr;
+	LinkedList<T>::Node * next = nullptr;
+	while(curr != nullptr) {
 		next = curr->next;
 		curr->next = prev;
 		prev = curr;

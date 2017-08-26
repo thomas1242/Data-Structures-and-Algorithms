@@ -12,20 +12,22 @@ class HashMap : public Map<K, V> {
 		K key;
 		V value;
 		Node * next;
-		Node() : key(), value() {}
-		Node(const K& k, const V& v) {
+		Node() : key(), value(), next(nullptr) {}
+		Node(const K& k, const V& v) : next(nullptr) {
 			key = k;	
 			value = v;
 		}
+		// ~Node() { if(next) delete next; }
 	};
 
 	public:
 		HashMap();
 		~HashMap();
 		int size() const;
-		V* find(const K& key) const;
+		V& find(const K& key) const;
 		void insert(const K& key, const V& value);
 		void erase(const K& key);
+		bool contains(const K& key) const;
 		V ** getValues();
 
 	private:
@@ -39,7 +41,7 @@ HashMap<K, V>::HashMap() {
 	arrLength = 8;
 	buckets = new HashMap<K, V>::Node * [arrLength];
 	for(int i = 0; i < arrLength; i++)
-		buckets[i] = NULL;
+		buckets[i] = nullptr;
 }
 
 template <class K, class V>
@@ -49,7 +51,7 @@ HashMap<K, V>::~HashMap() {
 
 	for(int i = 0; i < arrLength; i++) {
 		curr = buckets[i];
-		while(curr != NULL) {	// delete nodes at bucket i
+		while(curr != nullptr) {	// delete nodes at bucket i
 			next = curr->next;
 			delete curr;
 			curr = next;
@@ -64,11 +66,11 @@ void HashMap<K, V>::insert(const K& key, const V& val) {
 
 	int bucket = (int) hash_fn(key) % arrLength;
 
-	if(buckets[bucket] == NULL)
+	if(buckets[bucket] == nullptr)
 		buckets[bucket] = new HashMap<K, V>::Node(key, val);
 	else {
 		HashMap<K, V>::Node * temp = buckets[bucket];
-		while(temp->key == key && temp->next != NULL) 
+		while(temp->key == key && temp->next != nullptr) 
 			temp = temp->next;
 		if(temp->key == key) {
 			erase(key);
@@ -80,16 +82,29 @@ void HashMap<K, V>::insert(const K& key, const V& val) {
 }
 
 template <class K, class V>
-V* HashMap<K, V>::find(const K& key) const {
+V& HashMap<K, V>::find(const K& key) const {
 	int bucket = (int) hash_fn(key) % arrLength;
 
 	HashMap<K, V>::Node * temp = buckets[bucket];
-	while(temp != NULL && temp->key != key)
+	while(temp != nullptr && temp->key != key)
 		temp = temp->next;
-	if(temp == NULL)
-		return NULL;
+	if(temp == nullptr)
+		throw std::runtime_error("cannot find key");
 	else
-		return &(temp->value);
+		return temp->value;
+}
+
+template <class K, class V>
+bool HashMap<K, V>::contains(const K& key) const {
+	int bucket = (int) hash_fn(key) % arrLength;
+
+	HashMap<K, V>::Node * temp = buckets[bucket];
+	while(temp != nullptr && temp->key != key)
+		temp = temp->next;
+	if(temp == nullptr)
+		return false;
+	else
+		return true;
 }
 
 template <class K, class V>
@@ -103,9 +118,9 @@ void HashMap<K, V>::erase(const K& key) {
 		delete temp;
 	}
 	else {
-		while(temp->next != NULL && temp->next->key != key)
+		while(temp->next != nullptr && temp->next->key != key)
 			temp = temp->next;
-		if(temp->next == NULL)
+		if(temp->next == nullptr)
 			return;	// not found
 		else {
 			HashMap<K, V>::Node * tmp = temp->next;
@@ -121,7 +136,7 @@ int HashMap<K, V>::size() const {
 	for(int i = 0; i < arrLength; i++) {
 		int len = 0;
 		HashMap<K, V>::Node * temp = buckets[i];
-		while(temp != NULL) {
+		while(temp != nullptr) {
 			len++;
 			temp = temp->next;
 		}
@@ -138,7 +153,7 @@ V ** HashMap<K, V>::getValues() {
 	HashMap<K, V>::Node * curr;
 	for(int i = 0; i < arrLength; i++) {
 		curr = buckets[i];
-		while(curr != NULL) {	
+		while(curr != nullptr) {	
 			vals[n++] = &(curr->value);	
 			curr = curr->next;
 		}
@@ -146,8 +161,5 @@ V ** HashMap<K, V>::getValues() {
 	
 	return vals;
 }
-
-
-
 
 #endif

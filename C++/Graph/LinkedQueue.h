@@ -12,8 +12,8 @@ class LinkedQueue : public Queue<T> {
 	struct Node {
 	        T data;
 	        Node * next;
-	       	Node(const T & d) : data(d) {}
-	    	Node(const Node & node) : Node( node.data ) {}
+	       	Node(const T & d) : data(d), next(nullptr) {}
+	    	Node(const Node & node) : Node( node.data ), next(nullptr) {}
 	};
 
 	public: 

@@ -12,7 +12,7 @@ class Graph {
 		T data;
 		bool visited;
 		LinkedList<Node*> adjacent;
-		Node() {}
+		Node() : data(), visited(false) {}
 		Node(const T& d) : data(d), visited(false) {}
 	};
 
@@ -36,12 +36,12 @@ Graph<T>::~Graph() {}
 
 template <class T>					// directed graph
 void Graph<T>::addEdge(const T& v1, const T& v2) {	// add edge from v1 to v2
-	if(map.find(v1) == NULL)	
+	if(!map.contains(v1))	
 		map.insert(v1, Graph<T>::Node(v1));
-	if(map.find(v2) == NULL)
+	if(!map.contains(v2))
 		map.insert(v2, Graph<T>::Node(v2));
 										
-	map.find(v1)->adjacent.append( map.find(v2) );
+	map.find(v1).adjacent.append( &(map.find(v2)) );
 }
 
 template <class T>
@@ -49,8 +49,8 @@ bool Graph<T>::BFS(const T& v1, const T& v2) const {
 	
 	LinkedQueue< Graph<T>::Node* >  q;
 
-	q.add( map.find(v1) );
-	map.find(v1)->visited = true;
+	q.add( &map.find(v1) );
+	map.find(v1).visited = true;
 
 	while( !q.isEmpty() ) {
 
@@ -75,12 +75,14 @@ bool Graph<T>::DFS(const T& v1, const T& v2) const {
 	if(v1 == v2)
 		return true;
 
-	Graph<T>::Node * node = map.find(v1);
-	node->visited = true;
+	if(!map.contains(v1) || !map.contains(v2)) return false;
 
-	for(int i = 0; i < node->adjacent.size(); i++) 
-		if(node->adjacent.get(i)->visited == false) 
-			return DFS(node->adjacent.get(i)->data, v2);
+	Graph<T>::Node & node = map.find(v1);
+	node.visited = true;
+
+	for(int i = 0; i < node.adjacent.size(); i++) 
+		if(node.adjacent.get(i)->visited == false) 
+			return DFS(node.adjacent.get(i)->data, v2);
 		
 	return false;
 }
@@ -93,9 +95,6 @@ void Graph<T>::clearVisited() {
 	for(int i = 0; i < n; i++) 
 		vals[i]->visited = false;
 }
-
-
-
 
 
 #endif
