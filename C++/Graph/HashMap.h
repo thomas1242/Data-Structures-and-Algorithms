@@ -12,11 +12,10 @@ class HashMap : public Map<K, V> {
 		K key;
 		V value;
 		Node * next;
-		Node() {}
-		Node(const K & k, const V & v) {
+		Node() : key(), value() {}
+		Node(const K& k, const V& v) {
 			key = k;	
 			value = v;
-			next = NULL;
 		}
 	};
 
