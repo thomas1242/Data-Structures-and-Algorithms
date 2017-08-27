@@ -14,6 +14,7 @@ struct Node {
 		for(int i = 0; i < 26; i++) 
 			children[i] = nullptr;
 	}
+	~Node() { delete[] children; }
 };
 
 class Trie {
@@ -28,9 +29,19 @@ class Trie {
 	private:
 		Node * root;
 		void printAll(const Node * node, std::string prefix) const;
+		void deleteTree(Node *& node);
 };
 
-Trie::~Trie() {	// TODO : visit each Node and call its destructor
+Trie::~Trie() {
+	deleteTree(root);
+}
+
+void Trie::deleteTree(Node *& node) {
+	if(node == nullptr) 
+		return;
+	for(int i = 0; i < 26; i++) 
+		deleteTree( node->children[i] );
+	delete node;
 }
 
 Trie::Trie() {
