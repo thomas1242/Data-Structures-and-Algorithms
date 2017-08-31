@@ -12,11 +12,7 @@ class HashMap : public Map<K, V> {
 		K key;
 		V value;
 		Node * next;
-		Node(const K & k, const V & v) {
-			key = k;	
-			value = v;
-			next = NULL;
-		}
+		Node(const K& k, const V& v) : key(k), value(v), next(nullptr) {}
 	};
 
 	public:
@@ -28,7 +24,7 @@ class HashMap : public Map<K, V> {
 		void erase(const K& key);
 
 	private:
-		HashMap<K, V>::Node ** buckets;	// pointer to adjacency list
+		HashMap<K, V>::Node ** buckets;	// adjacency list
 		int arrLength;
 		std::hash<K> hash_fn;
 };
@@ -38,7 +34,7 @@ HashMap<K, V>::HashMap() {
 	arrLength = 8;
 	buckets = new HashMap<K, V>::Node * [arrLength];
 	for(int i = 0; i < arrLength; i++)
-		buckets[i] = NULL;
+		buckets[i] = nullptr;
 }
 
 template <class K, class V>
@@ -48,7 +44,7 @@ HashMap<K, V>::~HashMap() {
 
 	for(int i = 0; i < arrLength; i++) {
 		curr = buckets[i];
-		while(curr != NULL) {	// delete nodes at bucket i
+		while(curr != nullptr) {	// delete nodes at bucket i
 			next = curr->next;
 			delete curr;
 			curr = next;
@@ -63,11 +59,11 @@ void HashMap<K, V>::insert(const K& key, const V& val) {
 
 	int bucket = (int) hash_fn(key) % arrLength;
 
-	if(buckets[bucket] == NULL)
+	if(buckets[bucket] == nullptr)
 		buckets[bucket] = new HashMap<K, V>::Node(key, val);
 	else {
 		HashMap<K, V>::Node * temp = buckets[bucket];
-		while(temp->key == key && temp->next != NULL) 
+		while(temp->key == key && temp->next != nullptr) 
 			temp = temp->next;
 		if(temp->key == key) {
 			erase(key);
@@ -83,10 +79,10 @@ V* HashMap<K, V>::find(const K& key) const {
 	int bucket = (int) hash_fn(key) % arrLength;
 
 	HashMap<K, V>::Node * temp = buckets[bucket];
-	while(temp != NULL && temp->key != key)
+	while(temp != nullptr && temp->key != key)
 		temp = temp->next;
-	if(temp == NULL)
-		return NULL;
+	if(temp == nullptr)
+		return nullptr;
 	else
 		return &(temp->value);
 }
@@ -102,9 +98,9 @@ void HashMap<K, V>::erase(const K& key) {
 		delete temp;
 	}
 	else {
-		while(temp->next != NULL && temp->next->key != key)
+		while(temp->next != nullptr && temp->next->key != key)
 			temp = temp->next;
-		if(temp->next == NULL)
+		if(temp->next == nullptr)
 			return;	// not found
 		else {
 			HashMap<K, V>::Node * tmp = temp->next;
@@ -120,7 +116,7 @@ int HashMap<K, V>::size() const {
 	for(int i = 0; i < arrLength; i++) {
 		int len = 0;
 		HashMap<K, V>::Node * temp = buckets[i];
-		while(temp != NULL) {
+		while(temp != nullptr) {
 			len++;
 			temp = temp->next;
 		}
@@ -128,9 +124,6 @@ int HashMap<K, V>::size() const {
 	}
 	return sum;
 }
-
-
-
 
 
 

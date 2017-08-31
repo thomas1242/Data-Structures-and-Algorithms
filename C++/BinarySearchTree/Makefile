@@ -1,5 +1,7 @@
+CXXFLAGS = -std=c++11
+
 all: 
-	g++ -std=c++11 -o Main Main.cpp 
+	g++ -o Main Main.cpp 
 	./Main
 
 clean:
