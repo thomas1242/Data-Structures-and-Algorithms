@@ -1,16 +1,5 @@
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
-
-
-class Node {
-	int val;
-	Node left;
-	Node right;
-	public Node(int val) {
-		this.val = val;
-	}
-}
 
 class LetterCombinationsOfPhoneNumber {
 
@@ -32,9 +21,9 @@ class LetterCombinationsOfPhoneNumber {
 		}
 			
 		String[] res = new String[ q.size() ];
-
 		int n = 0;
-		while( !q.isEmpty() ) res[n++] = q.remove();
+		while( !q.isEmpty() ) 
+			res[n++] = q.remove();
 	
 		return res;		
 	}
