@@ -2,13 +2,13 @@ public class QuickSort {
 
     public static void quickSort(int[] arr, int left, int right) {
 
-    		int partition = partition(arr, left, right);
+    		int partition = partition(arr, left, right);  // index of first element in rightside partition
 
-    		if(left < partition - 1)
-    			quickSort(arr, left, partition - 1);
+    		if(left < partition - 1)                  // if leftside partition contains more than 1 element
+    			quickSort(arr, left, partition - 1);  // recursively apply quicksort
 
-    		if(right > partition)
-    			quickSort(arr, partition, right);
+    		if(right > partition)                     // if rightside partiton contains more than 1 element
+    			quickSort(arr, partition, right);     // recursively apply quicksort
     }
 
     public static int partition(int[] arr, int left, int right) {
@@ -23,8 +23,8 @@ public class QuickSort {
     		while(arr[right] > pivot)	// find rightside element less than pivot
     			right--;
 
-    		if(left <= right) {			
-    			int temp = arr[left];	// swap the two elements
+    		if(left <= right) {			// swap the two elements
+    			int temp = arr[left];	
     			arr[left] = arr[right];
     			arr[right] = temp;
     			left++;
@@ -32,7 +32,7 @@ public class QuickSort {
     		}
     	}
 
-    	return left;					// return partition index
+    	return left;		// return index of first element in rightside partition
     }
 
     public static void print1DArray(int[] arr) {
