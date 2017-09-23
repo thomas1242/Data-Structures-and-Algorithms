@@ -1,15 +1,13 @@
 class MaximumContiguousSubarray {
 
 	static int valueOfMaximumContiguousSubarr(int[] arr) {
-		int localSum = 0, maxSum = 0;
+		int[] dp = new int[arr.length];
+		dp[0] = arr[0];
+		int maxSum = dp[0];
 
-		for(Integer n : arr) {
-			if (n < 0) 
-				localSum = 0;
-			else {
-				localSum += n;
-				maxSum = localSum > maxSum ? localSum : maxSum;
-			}
+		for (int i = 1; i < dp.length; i++) {
+			dp[i] = arr[i] + (dp[i - 1] > 0 ? dp[i - 1] : 0);
+			maxSum = Math.max(maxSum, dp[i]);
 		}
 
 		return maxSum;
@@ -59,6 +57,10 @@ class MaximumContiguousSubarray {
 	public static void main(String[] args) {
 		int[] arr = new int[]{1, 3, -2, 5, -10, 3, 3, -1};
 		System.out.println( valueOfMaximumContiguousSubarr(arr) );
+		arr = new int[]{-2, -3, 4, -1, -2, 1, 5, -3};
+		System.out.println( valueOfMaximumContiguousSubarr(arr) );
+
+
 
 		int[] rotatedSortedArr = new int[]{5, 6, 2, 3, 4};
 		System.out.println( findElementInRotatedSortedArr(rotatedSortedArr, 5) );
