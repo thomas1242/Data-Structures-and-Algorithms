@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Stack;
 
-
 public class Graph<T> {
 
 	private static class Node<T> {
@@ -19,26 +18,28 @@ public class Graph<T> {
 		}
 	}
 
-	private HashMap<T, Node> adjacencyList;
+	private HashMap<T, Node> graph;
 
 	public Graph() {
-		adjacencyList = new HashMap<>();
+		graph = new HashMap<>();
 	}
 
 	public void addEdge(T v1, T v2) {
-		if(adjacencyList.get(v1) == null) adjacencyList.put( v1, new Node(v1) );
-		if(adjacencyList.get(v2) == null) adjacencyList.put( v2, new Node(v2) );
+		if(graph.get(v1) == null) 
+			graph.put( v1, new Node(v1) );
+		if(graph.get(v2) == null) 
+			graph.put( v2, new Node(v2) );
 
-		adjacencyList.get(v1).adj.add( adjacencyList.get(v2) );
+		graph.get(v1).adj.add( graph.get(v2) );
 	}
 
 	public boolean DFS(T v1, T v2) {
 		if(v1 == v2)
 			return true;
 
-		adjacencyList.get(v1).visited = true;
+		graph.get(v1).visited = true;
 
-		for(Node n : (List<Node>)adjacencyList.get(v1).adj) 
+		for(Node n : (List<Node>)graph.get(v1).adj) 
 			if( !n.visited ) 
 				return DFS((T)n.id, v2);
 
@@ -49,8 +50,8 @@ public class Graph<T> {
 
 		Queue<Node> q = new LinkedList<Node>();
 
-		Node start = adjacencyList.get(v1);
-		Node end   = adjacencyList.get(v2);
+		Node start = graph.get(v1);
+		Node end   = graph.get(v2);
 
 		q.add( start );
 		start.visited = true;
@@ -77,8 +78,8 @@ public class Graph<T> {
 
 		Queue<Node> q = new LinkedList<Node>();
 
-		Node startNode = adjacencyList.get(start);
-		Node endNode   = adjacencyList.get(end);
+		Node startNode = graph.get(start);
+		Node endNode   = graph.get(end);
 
 		q.add( startNode );
 		startNode.visited = true;
@@ -126,7 +127,7 @@ public class Graph<T> {
     }
 
 	public void clearVisited() {
-		for(Node n : adjacencyList.values()) n.visited = false;
+		for(Node n : graph.values()) n.visited = false;
 	}
 
 	public static void main(String[] args) {

@@ -1,59 +1,37 @@
+import java.util.List;
 import java.util.LinkedList;
-import java.util.Queue;
 
 class LetterCombinationsOfPhoneNumber {
 
-	static String[] getLetterCombinations(String input) {
-
-		String[] map = new String[]{"", "ABC", "DEF", "GHI", "JKL", "MNO", "PQR"};
-
-		Queue<String> q = new LinkedList<>();
-		q.add("");
-
-		for(int i = 0; i < input.length(); i++) {
-			while(q.peek().length() < i + 1) {
-
-				String part = q.remove();
-				for(int j = 0; j < map[ Character.getNumericValue( input.charAt(i) ) ].length(); j++) 
-					q.add( (part + map[ Character.getNumericValue( input.charAt(i) ) ].charAt(j) ) );
-
-			}	
-		}
-			
-		String[] res = new String[ q.size() ];
-		int n = 0;
-		while( !q.isEmpty() ) 
-			res[n++] = q.remove();
-	
-		return res;		
-	}
+	static List<String> letterCombinations(String digits) {
+        String[] dict = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        
+        List<String> q = new LinkedList<>();        
+        q.add("");
+        
+        for(int i = 0; i < digits.length(); i++) {
+            while(q.get(0).length() < i + 1) {
+                String curr = q.remove(0);
+                for(int j = 0; j < dict[ Character.getNumericValue(digits.charAt(i)) ].length(); j++) 
+                    q.add( curr +  dict[ Character.getNumericValue(digits.charAt(i)) ].charAt(j) );
+            }
+        }
+        
+        return q;
+    }
 
 	public static void main(String[] args) {
-
 		String input = "23";
-		String[] combos = getLetterCombinations( input );
+		List<String> combos = letterCombinations( input );
 
 		for(String combo : combos) 
 			System.out.print(combo + ", ");
-		
 		System.out.println("\n");
 
 		input = "235";
-		combos = getLetterCombinations( input );
+		combos = letterCombinations( input );
 
 		for(String combo : combos) 
 			System.out.print(combo + ", ");
-
 	}
-
-
 }
-
-
-
-
-
-
-
-
-
