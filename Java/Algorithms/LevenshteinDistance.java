@@ -4,22 +4,24 @@ class LevenshteinDistance {
 	// 		  (insertions, deletions or substitutions) required to change one string into the other.
 	
 	static int getStringDifference(String s1, String s2) {
-		if(s1.length() == 0) return s2.length();	// insert/remove all of S2's chars
-		if(s2.length() == 0) return s1.length();	// insert/remove all of S1's chars	
+		int len1 = s1.length(), len2 = s2.length();
 
-		int removeFromS1 = getStringDifference( s1.substring(0, s1.length() - 1), s2.substring(0, s2.length()) ) + 1; // remove/edit last char of S1
-		int removeFromS2 = getStringDifference( s1.substring(0, s1.length()), s2.substring(0, s2.length() - 1) ) + 1; // remove/edit last char of S2
+		if(len1 == 0) return len2;	
+		if(len2 == 0) return len1;		
 
-		int diff = (s1.charAt(s1.length() - 1)) == (s2.charAt(s2.length() - 1)) ? 0 : 1;	// remove/edit last char of either string, if necessary, to make last chars the same
-		int removeFromBoth = getStringDifference( s1.substring(0, s1.length() - 1), s2.substring(0, s2.length() - 1) ) + diff;
+		if(s1.charAt(len1 - 1) == s2.charAt(len2 - 1))
+			return getStringDifference( s1.substring(0, len1 - 1), s2.substring(0, len2 - 1) );
 
-		return Math.min(removeFromBoth, Math.min(removeFromS1, removeFromS2));
+		int editS1 = getStringDifference( s1.substring(0, len1 - 1), s2.substring(0, len2) ); 
+		int editS2 = getStringDifference( s1.substring(0, len1), s2.substring(0, len2 - 1) ); 
+		int editBoth = getStringDifference( s1.substring(0, len1 - 1), s2.substring(0, len2 - 1) );
+
+		return 1 + Math.min(editBoth, Math.min(editS1, editS2));
 	}
 
 	public static void main(String[] args) {
 		String s1 = "kitten";
 		String s2 = "sitting";
-	
 		System.out.println( getStringDifference(s1, s2) );
 	}
 }

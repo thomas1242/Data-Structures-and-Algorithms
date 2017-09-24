@@ -2,11 +2,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-
 class Node {
 	int val;
-	Node left;
-	Node right;
+	Node left, right;
 	public Node(int val) {
 		this.val = val;
 	}
@@ -23,8 +21,8 @@ class LowestCommonAncestor {
 			getPath(root.left, val, path);
 		else if(val > root.val)
 			getPath(root.right, val, path);
-
-		return path;
+		else
+			return path;
 	}
 
 	static Node getAncestor(int a, int b, Node root) {
@@ -45,10 +43,10 @@ class LowestCommonAncestor {
 
 	public static void main(String[] args) {
 
-		//	   7  
+		//	       7  
 		//      3     10
 		//    1   5      15
-                //          6
+        //          6
 
 		Node root = new Node(7);
 		root.left = new Node(3);
@@ -60,17 +58,5 @@ class LowestCommonAncestor {
 		
 		System.out.print("Lowest common ancestor: ");
 		System.out.print( getAncestor(1, 5, root).val );
-
 	}
-
-
 }
-
-
-
-
-
-
-
-
-
