@@ -1,10 +1,10 @@
 class Node {
-	int val;
+	int data;
 	Node next;
 	Node prev;
-
-	public Node(int val) {
-		this.val = val;
+	
+	public Node(int data) {
+		this.data = data;
 	}
 }
 
@@ -15,8 +15,7 @@ public class ReverseDLL {
 		if(head == null) return null;
 
 		Node curr = head;
-		Node next = null;
-		Node prev = null;
+		Node next = null, prev = null;
 
 		while(curr != null) {
 			next = curr.next;
@@ -31,23 +30,29 @@ public class ReverseDLL {
 	}
 
 	public static void main (String[] args) {
-		Node head = new Node(1);
-		head.next = new Node(2);
-		head.next.prev = head;
-		head.next.next = new Node(3);
-		head.next.next.prev = head.next;
-		head.next.next.next = new Node(4);
-		head.next.next.next.prev = head.next;
+		Node head = buildDLL(10);
 		
 		print(head);
 		head = reverse(head);
 		print(head);
 	}
 
+	static Node buildDLL(int n) {
+		Node head = new Node(0);
+		Node curr = head; 
+		for (int i = 1; i < n; i++) {
+			Node node = new Node(i);
+			node.prev = curr;
+			curr.next = node;
+			curr = node;
+		}
+		return head;
+	}
+
 	static void print(Node head) {
 		Node curr = head;
 		while(curr != null) {
-			System.out.print(curr.val + " ");
+			System.out.print(curr.data + " ");
 			curr = curr.next;
 		}
 		System.out.println();
