@@ -19,6 +19,7 @@ public class ArrayList<T> {
 		return newArr;
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < size; i++)
@@ -26,28 +27,23 @@ public class ArrayList<T> {
 		return sb.toString();
 	}
 
-	public void add(T n) {				// append
-		if(size == arr.length) 
+	public void add(T element) {				
+		if(size == arr.length) 			// resize array if full
 			arr = resizeArr(arr);
-		arr[size++] = n;
+		arr[size++] = element;
 	}
 
-	public void add(T n, int index) {	// insert at index 
+	public void add(T element, int index) {	
 		if(index < 0 || index > size)
 			return;
 
-		if(size == arr.length) 
+		if(size == arr.length) 					// resize array if full
 			arr = resizeArr(arr);
 			
-		Object[] temp = new Object[arr.length + 1];
+		for(int i = size + 1; i > index; i--)	// shift elements over to make room
+			arr[i] = arr[i - 1];
 
-		for(int i = 0; i < index; i++) 
-			temp[i] = arr[i];
-		temp[index] = n;
-		for(int i = index; i < arr.length; i++) 
-			temp[i + 1] = arr[i];
-		
-		arr = temp;
+		arr[index] = element;
 		size++;
 	}
 
@@ -75,12 +71,11 @@ public class ArrayList<T> {
 	}
 
 	@SuppressWarnings("unchecked")	 
-	public void remove(T obj) {			/// remove element from the list
-		if( isEmpty() )
-			return;
+	public void remove(T element) {			/// remove element from the list
+		if( isEmpty() ) return;
 
 		int index = 0;
-		while(index < size && obj != (T) arr[index])
+		while(index < size && element != (T) arr[index])
 			index++;
 
 		remove(index);
