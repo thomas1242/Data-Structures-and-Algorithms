@@ -29,14 +29,14 @@ public class Queue<T> {
 		if(head == null)
 			return null;
 		else 
-			return (T) head.data;
+			return head.data;
 	}
 
 	public T remove() {
 		if(head == null)
 			return null;
 		else {
-			T data = (T) head.data;
+			T data = head.data;
 			head = head.next;
 			if(head == null)
 				tail = null;

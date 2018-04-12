@@ -29,7 +29,7 @@ public class Stack<T> {
 		if(top == null)
 			return null;
 		else
-			return (T) top.data;
+			return top.data;
 	}
 
 	public boolean isEmpty() {
