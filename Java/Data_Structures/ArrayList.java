@@ -14,22 +14,27 @@ public class ArrayList<T> {
 
 	private Object[] resizeArr(Object[] arr) {
 		Object[] newArr = new Object[size * 2];
+		
 		for(int i = 0; i < arr.length; i++) 
 			newArr[i] = arr[i];
+
 		return newArr;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+
 		for(int i = 0; i < size; i++)
 			sb.append(arr[i] + " ");
+
 		return sb.toString();
 	}
 
 	public void add(T element) {				
 		if(size == arr.length) 			// resize array if full
 			arr = resizeArr(arr);
+
 		arr[size++] = element;
 	}
 
@@ -44,6 +49,7 @@ public class ArrayList<T> {
 			arr[i] = arr[i - 1];
 
 		arr[index] = element;
+
 		size++;
 	}
 
@@ -59,20 +65,16 @@ public class ArrayList<T> {
 		if(index < 0 || index >= size)
 			return;
 
-		Object[] temp = new Object[arr.length - 1];
-
-		for (int i = 0; i < index; i++) 
-			temp[i] = arr[i];
-		for (int i = index; i < temp.length; i++) 
-			temp[i] = arr[i+1];	
+		for (int i = index; i < size - 1; i++) 
+			arr[i] = arr[i + 1];	
 		
-		arr = temp;
 		size--;
 	}
 
 	@SuppressWarnings("unchecked")	 
 	public void remove(T element) {			/// remove element from the list
-		if( isEmpty() ) return;
+		if(isEmpty()) 
+			return;
 
 		int index = 0;
 		while(index < size && element != (T) arr[index])
