@@ -25,7 +25,13 @@ public class Queue<T> {
 		tail = newNode;
 	}
 
-	@SuppressWarnings("unchecked")	
+	public T peek() {
+		if(head == null)
+			return null;
+		else 
+			return (T) head.data;
+	}
+
 	public T remove() {
 		if(head == null)
 			return null;

@@ -25,7 +25,6 @@ public class Stack<T> {
 			top = top.next;
 	}
 
-	@SuppressWarnings("unchecked")	
 	public T peek() {
 		if(top == null)
 			return null;
