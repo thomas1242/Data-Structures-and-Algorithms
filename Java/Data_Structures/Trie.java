@@ -7,12 +7,17 @@ public class Trie {
 
 		public Node(char c) {
 			this.c = c;
-			children = new Node[26];
+			children = new Node[26];	// english alphabet, case in-sensitive
 		}
 	}
 
 	private Node root;
+
 	public Trie() {}
+
+	public void printAllWords() {
+		printAllWords(root, "");
+	}
 
 	private void printAllWords(Node root, String prefix) {
 		if(root == null)
@@ -23,7 +28,11 @@ public class Trie {
 
 		for(int i = 0; i < root.children.length; i++) 
 			if(root.children[i] != null) 
-				printAllWords( root.children[i], prefix + root.children[i].c );
+				printAllWords(root.children[i], prefix + root.children[i].c);
+	}
+
+	public void insertWord(String word) {
+		root = insertWord(root, word);
 	}
 
 	private Node insertWord(Node root, String word) {
@@ -43,8 +52,13 @@ public class Trie {
 
 			curr = curr.children[index];
 		}
+
 		curr.isWord = true;
 		return root;
+	}
+
+	public boolean containsWord(String word) {
+		return containsWord(word, root);
 	}
 
 	private static boolean containsWord(String word, Node root) {
@@ -65,18 +79,6 @@ public class Trie {
 			return false;
 	}
 
-	public void printAllWords() {
-		printAllWords(root, "");
-	}
-
-	public void insertWord(String word) {
-		root = insertWord(root, word);
-	}
-
-	public boolean containsWord(String word) {
-		return containsWord(word, root);
-	}
-
 	public static void main(String[] args) {
 		Trie trie = new Trie();
 
@@ -88,12 +90,3 @@ public class Trie {
 		trie.printAllWords();
 	}
 }
-
-
-
-
-
-
-
-
-
