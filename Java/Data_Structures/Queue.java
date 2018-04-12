@@ -2,15 +2,16 @@ public class Queue<T> {
 
 	private static class Node<T> {
 		T data;
-		Node next;
+		Node<T> next;
+		
 		public Node(T data) {
 			this.data = data;
 			next = null;
 		}
 	}
 
-	private Node front; 
-	private Node back;
+	private Node<T> head; 
+	private Node<T> tail;
 	private int size;
 
 	public Queue() {
@@ -18,24 +19,31 @@ public class Queue<T> {
 	}
 
 	public void add(T data) {
-		if(front == null) {
-			front = new Node(data);
-			back = front;
-		}
-		else {
-			back.next = new Node(data);
-			back = back.next;
-		}
+		Node<T> newNode = new Node<T>(data);
+
+		if(head == null) 
+			head = newNode;
+		else 
+			tail.next = newNode;
+
+		tail = newNode;
+	}
+
+	public T peek() {
+		if(head == null)
+			return null;
+		else 
+			return (T) head.data;
 	}
 
 	public T remove() {
-		if(front == null)
+		if(head == null)
 			return null;
 		else {
-			T data = (T)front.data;
-			front = front.next;
-			if(front == null)
-				back = null;
+			T data = (T) head.data;
+			head = head.next;
+			if(head == null)
+				tail = null;
 			return data;
 		}
 	}
@@ -45,10 +53,7 @@ public class Queue<T> {
 	}
 
 	public static void main(String[] args) {
-
 		Queue<Integer> q0 = new Queue<>();
 		Queue<String>  q1 = new Queue<>();
-		Queue<Character>  q2 = new Queue<>();
-
 	}
 }
