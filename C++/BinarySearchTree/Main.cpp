@@ -38,7 +38,7 @@ int main() {
 	if(res)	std::cout << "\033[1;32mPASS\033[0m" << std::endl;
 	else 	std::cout << "\033[1;31mFAIL\033[0m" << std::endl;
 
-	bst->~BinarySearchTree<int>();
+	delete bst;
 	
 	return 0;
 }

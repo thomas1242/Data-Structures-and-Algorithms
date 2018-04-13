@@ -106,16 +106,17 @@ template <class T>
 typename BinarySearchTree<T>::Node * BinarySearchTree<T>::remove(BinarySearchTree<T>::Node *& node, const T& data) {
 	if(node == nullptr)	// data not found
 		return nullptr;	
-	
+
 	if(data < node->data) 
 		node->left = remove(node->left, data);
 	else if (data > node->data) 
 		node->right = remove(node->right, data);
-	else { 				
-		if(node->left == nullptr)
-			return node->right;
-		else if(node->right == nullptr)
-			return node->left;
+	else { 	
+		if(node->left == nullptr || node->right == nullptr) {
+			BinarySearchTree<T>::Node * child = node->left == nullptr ? node->right : node->left;
+			delete node;
+			return child;
+		}
 		else {
 			T min = getMin(node->right);
 			node->right = remove(node->right, min);
