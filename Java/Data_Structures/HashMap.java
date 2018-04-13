@@ -1,9 +1,12 @@
+import java.util.Set;
+import java.util.HashSet;
+
 public class HashMap<K, V> {
 
 	private static class Node<K, V> {
 		private K key;
 		private V value;
-		private Node next;
+		private Node<K, V> next;
 
 		public Node(K key, V value) {
 				this.key = key;
@@ -11,90 +14,101 @@ public class HashMap<K, V> {
 		}
 	}
 
-	private static final int initial_capacity = 8;
-	private static final double load_factor  = 0.7;
-	private Node[] table;
+	private Object[] table;
 	private int size;
+	private final int initial_capacity = 4;
+	private final double load_factor = 0.75;
 
 	public HashMap() {
-		table = new Node[ initial_capacity ];
-		size = 0;
+		table = new Object[initial_capacity];
 	}
 
+	@SuppressWarnings("unchecked")
+	public Set<K> keySet() {
+		Set<K> keys = new HashSet<>();
+
+		for (Object bucket : table) {
+			Node<K, V> curr = (Node<K, V>) bucket;
+			while(curr != null) {
+				keys.add(curr.key);
+				curr = curr.next;
+			}
+		}
+
+		return keys;
+	}
+
+	@SuppressWarnings("unchecked")	
 	public void put(K key, V value) {
 		int hashCode = getHashCode( key );
 
 		if(++size > table.length * load_factor )
-			table = resizeArray(table);
+			resizeArray();
 
 		if(table[hashCode] == null)
-			table[hashCode] = new Node(key, value);
+			table[hashCode] = new Node<K, V>(key, value);
 		else {
-			Node curr = table[hashCode];
+			Node<K, V> curr = (Node<K, V>) table[hashCode];
 			while(curr.next != null)
 				curr = curr.next;
-			curr.next = new Node(key, value);
+			curr.next = new Node<K, V>(key, value);
 		}
 	}
 
+	@SuppressWarnings("unchecked")	
 	public V get(K key) {
 		int hashCode = getHashCode( key );
 		
-		Node curr = table[hashCode];
+		Node<K, V> curr = (Node<K, V>) table[hashCode];
 		while(curr != null && curr.key != key)
 			curr = curr.next;
 
-		if(curr != null) 
-			return (V)curr.value;
-		// if entry not found due to resize
-		else {
-			for(Node list : table) {	// search the whole table, it could be anywhere
-				curr = list;
-				while(curr != null && curr.key != key)
-					curr = curr.next;
-				if(curr != null && curr.key == key)
-					return (V)curr.value;
-			}
-			return null;
-		}
+		return curr != null ? curr.value : null;
 	}
 
+	@SuppressWarnings("unchecked")	
 	public boolean containsKey(K key) {
 		int hashCode = getHashCode( key );
 		
-		Node curr = table[hashCode];
+		Node<K, V> curr = (Node<K, V>) table[hashCode];
 		while(curr != null && curr.key != key)
 			curr = curr.next;
 
-		// if entry found
-		if(curr != null) 
-			return true;
-		// if entry not found due to array resizing after first hash
-		else {
-			for(Node list : table) {	// search the whole table, it could be anywhere
-				curr = list;
-				while(curr != null && curr.key != key)
-					curr = curr.next;
-				if(curr != null && curr.key == key)
-					return true;
+		return curr != null ? true : false;
+	}
+
+	private void resizeArray() {
+		Set<Node<K, V>> entrySet = entrySet();
+
+		table = new Object[table.length * 2];
+		size = 0;
+		
+		for(Node<K, V> entry : entrySet)	// rehash items into new table 
+			put(entry.key, entry.value);	// because hash function uses updated table size
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<Node<K, V>> entrySet() {
+		Set<Node<K, V>> entries = new HashSet<>();
+
+		for (Object bucket : table) {
+			Node<K, V> curr = (Node<K, V>) bucket;
+			while(curr != null) {
+				entries.add(curr);
+				curr = curr.next;
 			}
-				return false;
 		}
+
+		return entries;
 	}
 
-	public Node[] resizeArray(Node[] oldTable) {
-		Node[] newTable = new Node[oldTable.length * 2];
-		for(int i = 0; i < oldTable.length; i++) 
-			newTable[i] = oldTable[i];
-		return newTable;
-	}
-
-	@Override
+	@Override @SuppressWarnings("unchecked")	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+
 		int i = 0;
-		for (Node n : table) {
-			Node curr = n;
+		for (Object bucket : table) {
+			Node<K, V> curr = (Node<K, V>) bucket;
 			sb.append( "bucket " + i++ + ": " );
 			while(curr != null) {
 				sb.append( "{" + curr.key + ", " + curr.value + "} " );
@@ -102,7 +116,7 @@ public class HashMap<K, V> {
 			}
 			sb.append("\n");
 		}
-		sb.append("\n");
+
 		return sb.toString();
 	}
 
@@ -111,20 +125,17 @@ public class HashMap<K, V> {
 	}
 
 	public static void main(String[] args) {
-		HashMap<String, Integer> map = new HashMap<>();
-		HashMap<Integer, String> map1 = new HashMap<>();
+		HashMap<Integer, String> map = new HashMap<>();
+		map.put(5,  "five");
+		map.put(6,  "six");
+		map.put(7,  "seven");	
+		System.out.println(map);	// map is 75% full, next insert will trigger resize
 
-		map.put("first", 1);
-		map.put("second", 2);
-		map.put("third", 3);
-		map.put("fourth", 4);
-		map1.put(5, "fifth");
-		map1.put(6, "six");
-		map1.put(7, "seven");
-		map1.put(8, "eight");
+		map.put(8,  "eight");
+		map.put(9,  "nine");
+		map.put(10, "ten");
+		System.out.println(map);	// print map after resize
 
-		System.out.print(map.toString());
-		System.out.print(map1.toString());
+		System.out.println(map.get(5));	
 	}
-
 }
