@@ -1,5 +1,6 @@
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Random;
 
 public class HashMap<K, V> {
 
@@ -17,13 +18,53 @@ public class HashMap<K, V> {
 	private Object[] table;
 	private int size;
 	private final int initial_capacity = 4;
-	private final double load_factor = 0.75;
+	private final double load_factor = .75;
 
 	public HashMap() {
 		table = new Object[initial_capacity];
 	}
 
-	@SuppressWarnings("unchecked")
+	public void put(K key, V value) {
+		if(++size > table.length * load_factor )
+			resizeArray();
+
+		int index = hash(key);
+
+		Node<K, V> newEntry = new Node<>(key, value);
+		newEntry.next = (Node<K, V>) table[index];
+		table[index] = newEntry;
+	}
+
+	public V get(K key) {
+		int index = hash(key);
+		
+		Node<K, V> curr = (Node<K, V>) table[index];
+		while(curr != null && !curr.key.equals(key))
+			curr = curr.next;
+
+		return curr != null ? curr.value : null;
+	}
+
+	private void resizeArray() {
+		Set<Node<K, V>> entrySet = entrySet();
+
+		table = new Object[table.length * 2];	// resize table
+		size = 0;
+		
+		for(Node<K, V> entry : entrySet)		// rehash items into new table 
+			put(entry.key, entry.value);	
+	}
+	
+	public boolean containsKey(K key) {
+		int index = hash(key);
+		
+		Node<K, V> curr = (Node<K, V>) table[index];
+		while(curr != null && !curr.key.equals(key))
+			curr = curr.next;
+
+		return curr != null ? true : false;
+	}
+
 	public Set<K> keySet() {
 		Set<K> keys = new HashSet<>();
 
@@ -38,56 +79,26 @@ public class HashMap<K, V> {
 		return keys;
 	}
 
-	@SuppressWarnings("unchecked")	
-	public void put(K key, V value) {
-		int hashCode = getHashCode( key );
+	public void remove(K key) {
+		int index = hash(key);
 
-		if(++size > table.length * load_factor )
-			resizeArray();
+		if(table[index] == null) 
+			return;
 
-		if(table[hashCode] == null)
-			table[hashCode] = new Node<K, V>(key, value);
+		if(((Node<K, V>) table[index]).key.equals(key)) 
+			table[index] = ((Node<K, V>) table[index]).next;
 		else {
-			Node<K, V> curr = (Node<K, V>) table[hashCode];
-			while(curr.next != null)
+			Node<K, V> curr = (Node<K, V>) table[index];
+			while(curr.next != null) {
+				if(curr.next.key.equals(key)) {
+					curr.next = curr.next.next;
+					break;
+				}
 				curr = curr.next;
-			curr.next = new Node<K, V>(key, value);
+			}
 		}
 	}
 
-	@SuppressWarnings("unchecked")	
-	public V get(K key) {
-		int hashCode = getHashCode( key );
-		
-		Node<K, V> curr = (Node<K, V>) table[hashCode];
-		while(curr != null && curr.key != key)
-			curr = curr.next;
-
-		return curr != null ? curr.value : null;
-	}
-
-	@SuppressWarnings("unchecked")	
-	public boolean containsKey(K key) {
-		int hashCode = getHashCode( key );
-		
-		Node<K, V> curr = (Node<K, V>) table[hashCode];
-		while(curr != null && curr.key != key)
-			curr = curr.next;
-
-		return curr != null ? true : false;
-	}
-
-	private void resizeArray() {
-		Set<Node<K, V>> entrySet = entrySet();
-
-		table = new Object[table.length * 2];
-		size = 0;
-		
-		for(Node<K, V> entry : entrySet)	// rehash items into new table 
-			put(entry.key, entry.value);	// because hash function uses updated table size
-	}
-
-	@SuppressWarnings("unchecked")
 	public Set<Node<K, V>> entrySet() {
 		Set<Node<K, V>> entries = new HashSet<>();
 
@@ -102,7 +113,7 @@ public class HashMap<K, V> {
 		return entries;
 	}
 
-	@Override @SuppressWarnings("unchecked")	
+	@Override 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
@@ -114,28 +125,29 @@ public class HashMap<K, V> {
 				sb.append( "{" + curr.key + ", " + curr.value + "} " );
 				curr = curr.next;
 			}
-			sb.append("\n");
+			sb.append('\n');
 		}
 
 		return sb.toString();
 	}
 
-	private int getHashCode(K key) {
-		return Math.abs(key.hashCode()) % table.length;
+	private int hash(K key) {
+		return Math.abs(key.hashCode()) * 37 % table.length;
 	}
 
 	public static void main(String[] args) {
 		HashMap<Integer, String> map = new HashMap<>();
-		map.put(5,  "five");
-		map.put(6,  "six");
-		map.put(7,  "seven");	
-		System.out.println(map);	// map is 75% full, next insert will trigger resize
 
-		map.put(8,  "eight");
-		map.put(9,  "nine");
-		map.put(10, "ten");
-		System.out.println(map);	// print map after resize
+		Random rand = new Random();
+		for (int i = 0; i < 10; i++) {
+			int randInt = rand.nextInt(1000);
+			map.put(randInt, randInt + "");
+		}
 
-		System.out.println(map.get(5));	
+		System.out.println(map);	
+		for(Integer key : map.keySet())
+			if(key % 2 == 1)
+				map.remove(key);
+		System.out.println(map);	 
 	}
 }
