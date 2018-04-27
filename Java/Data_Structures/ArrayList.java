@@ -5,7 +5,6 @@ public class ArrayList<T> {
 
 	public ArrayList() {
 		arr = new Object[8];
-		size = 0;
 	}
 
 	public boolean isEmpty() {
@@ -17,16 +16,16 @@ public class ArrayList<T> {
 		StringBuilder sb = new StringBuilder();
 
 		for(int i = 0; i < size; i++)
-			sb.append(arr[i]).append(' ');
+			sb.append( arr[i] ).append( ' ' );
 
 		return sb.toString();
 	}
 
-	private Object[] resizeArr(Object[] arr) {
-		Object[] newArr = new Object[size * 2];
+	private Object[] resizeArr(Object[] oldArr) {
+		Object[] newArr = new Object[oldArr.length * 2];
 		
-		for(int i = 0; i < arr.length; i++) 
-			newArr[i] = arr[i];
+		for(int i = 0; i < oldArr.length; i++) 
+			newArr[i] = oldArr[i];
 
 		return newArr;
 	}
@@ -84,21 +83,14 @@ public class ArrayList<T> {
 	}
 
 	public static void main(String[] args) {
-		ArrayList<Integer> integerList = new ArrayList<>();
-
-		for(int i = 0; i <= 5; i++) 
-			integerList.add( i * 10 );
-
-		System.out.println( integerList );
-
-		ArrayList<String> stringList = new ArrayList<>();
+		ArrayList<String> list = new ArrayList<>();
 		
-		for(String s : new String[]{"one", "two", "four", "eight", "sixteen"}) 
-			stringList.add( s );
+		for(String str : new String[]{"one", "two", "four", "eight", "sixteen"}) 
+			list.add( str );
 	
-		stringList.remove( 0 );
-		stringList.remove( "four" );
+		list.remove( 0 );
+		list.remove( "four" );
 
-		System.out.println( stringList );
+		System.out.println( list );
 	}
 }
