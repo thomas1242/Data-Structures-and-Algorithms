@@ -2,29 +2,20 @@ public class Stack<T> {
 
 	private static class Node<T> {
 		T data;
-		Node next;
+		Node<T> next;
 		public Node(T data) {
 			this.data = data;
 		}
 	}
 
-	private Node top; 
-	private int size;
+	private Node<T> top;
 
-	public Stack() {
-		top = null;
-		size = 0;
-	}
+	public Stack() {}
 
 	public void push(T data) {
-		if(top == null) 
-			top = new Node<T>(data);
-		else {
-			Node<T> newNode = new Node<T>(data);
-			newNode.next = top;
-			top = newNode;
-		}
-		size++;
+		Node<T> newNode = new Node<T>(data);
+		newNode.next = top;
+		top = newNode;
 	}
 
 	public void pop() {
@@ -32,10 +23,9 @@ public class Stack<T> {
 			return;
 		else 
 			top = top.next;
-		size--;
 	}
 
-	public Object peek() {
+	public T peek() {
 		if(top == null)
 			return null;
 		else
@@ -43,27 +33,42 @@ public class Stack<T> {
 	}
 
 	public boolean isEmpty() {
-		return size == 0;
+		return top == null;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		Node<T> curr = top;
+		sb.append("|   |\n");
+		while(curr != null) {
+			sb.append("| " + curr.data + " |\n");
+			curr = curr.next;
+		}
+		sb.append("|___|\n");
+
+		return sb.toString();
+	}
+
+	public int size() {
+		return size(top);
+	}
+
+	private int size(Node<T> node) {
+		if(node == null)
+			return 0;
+		else
+			return 1 + size(node.next);
 	}
 
 	public static void main(String[] args) {
-		Stack<Integer> s1 = new Stack<>();
-		Stack<String>  s2 = new Stack<>();
-		
+		Stack<Integer> s1 = new Stack<>();		
 		s1.push(1);
 		s1.push(2);
 		s1.push(3);
-		while( !s1.isEmpty() ) {
-			System.out.println(s1.peek());
+		System.out.println(s1);
+		while( !s1.isEmpty() )  
 			s1.pop();
-		}
-	
-		s2.push("one");
-		s2.push("two");
-		s2.push("three");
-		while( !s2.isEmpty() ) {
-			System.out.println(s2.peek());
-			s2.pop();
-		}
 	}
 }

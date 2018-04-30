@@ -5,4 +5,4 @@ all:
 	./Main
 
 clean:
-	rm Main
+	rm *.o Main

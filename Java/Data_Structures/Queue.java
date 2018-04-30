@@ -10,14 +10,11 @@ public class Queue<T> {
 
 	private Node<T> head; 
 	private Node<T> tail;
-	private int size;
 
-	public Queue() {
-		size = 0;
-	}
+	public Queue() {}
 
 	public void add(T data) {
-		Node<T> newNode = new Node<T>(data);
+		Node<T> newNode = new Node<>(data);
 
 		if (head == null) 
 			head = newNode;
@@ -31,7 +28,7 @@ public class Queue<T> {
 		if (head == null)
 			return null;
 		else 
-			return (T) head.data;
+			return head.data;
 	}
 
 	// returns the head of this queue, or throws an exception if queue is empty
@@ -49,7 +46,7 @@ public class Queue<T> {
 	}
 
 	// returns the head of this queue, or null if this queue is empty
-	public T poll() {		
+	public T remove() {		
 		if (head == null)
 			return null;
 		else {
@@ -62,12 +59,40 @@ public class Queue<T> {
 		}
 	}
 
+	public int size() {
+		return size(head);
+	}
+
+	private int size(Node<T> node) {
+		if(node == null)
+			return 0;
+		else
+			return 1 + size(node.next);
+	}
+
 	public boolean isEmpty() {
-		return size == 0;
+		return head == null;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		Node<T> curr = head;
+		while(curr != null) {
+			sb.append(curr.data + " ");
+			curr = curr.next;
+		}
+
+		return sb.toString();
 	}
 
 	public static void main(String[] args) {
-		Queue<Integer> q0 = new Queue<>();
-		Queue<String>  q1 = new Queue<>();
+		Queue<Integer> q = new Queue<>();
+
+		for (int i = 0; i < 10; i++) 
+			q.add(i);
+
+		System.out.println(q);
 	}
 }

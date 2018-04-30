@@ -1,9 +1,13 @@
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Random;
+
 public class HashMap<K, V> {
 
 	private static class Node<K, V> {
 		private K key;
 		private V value;
-		private Node next;
+		private Node<K, V> next;
 
 		public Node(K key, V value) {
 				this.key = key;
@@ -11,120 +15,139 @@ public class HashMap<K, V> {
 		}
 	}
 
-	private static final int initial_capacity = 8;
-	private static final double load_factor  = 0.7;
-	private Node[] table;
+	private Object[] table;
 	private int size;
+	private final int initial_capacity = 4;
+	private final double load_factor = .75;
 
 	public HashMap() {
-		table = new Node[ initial_capacity ];
-		size = 0;
+		table = new Object[initial_capacity];
 	}
 
 	public void put(K key, V value) {
-		int hashCode = getHashCode( key );
-
 		if(++size > table.length * load_factor )
-			table = resizeArray(table);
+			resizeArray();
 
-		if(table[hashCode] == null)
-			table[hashCode] = new Node(key, value);
-		else {
-			Node curr = table[hashCode];
-			while(curr.next != null)
-				curr = curr.next;
-			curr.next = new Node(key, value);
-		}
+		int index = hash(key);
+
+		Node<K, V> newEntry = new Node<>(key, value);
+		newEntry.next = (Node<K, V>) table[index];
+		table[index] = newEntry;
 	}
 
 	public V get(K key) {
-		int hashCode = getHashCode( key );
+		int index = hash(key);
 		
-		Node curr = table[hashCode];
-		while(curr != null && curr.key != key)
+		Node<K, V> curr = (Node<K, V>) table[index];
+		while(curr != null && !curr.key.equals(key))
 			curr = curr.next;
 
-		if(curr != null) 
-			return (V)curr.value;
-		// if entry not found due to resize
-		else {
-			for(Node list : table) {	// search the whole table, it could be anywhere
-				curr = list;
-				while(curr != null && curr.key != key)
-					curr = curr.next;
-				if(curr != null && curr.key == key)
-					return (V)curr.value;
-			}
-			return null;
-		}
+		return curr != null ? curr.value : null;
 	}
 
+	private void resizeArray() {
+		Set<Node<K, V>> entrySet = entrySet();
+
+		table = new Object[table.length * 2];	// resize table
+		size = 0;
+		
+		for(Node<K, V> entry : entrySet)		// rehash items into new table 
+			put(entry.key, entry.value);	
+	}
+	
 	public boolean containsKey(K key) {
-		int hashCode = getHashCode( key );
+		int index = hash(key);
 		
-		Node curr = table[hashCode];
-		while(curr != null && curr.key != key)
+		Node<K, V> curr = (Node<K, V>) table[index];
+		while(curr != null && !curr.key.equals(key))
 			curr = curr.next;
 
-		// if entry found
-		if(curr != null) 
-			return true;
-		// if entry not found due to array resizing after first hash
-		else {
-			for(Node list : table) {	// search the whole table, it could be anywhere
-				curr = list;
-				while(curr != null && curr.key != key)
-					curr = curr.next;
-				if(curr != null && curr.key == key)
-					return true;
+		return curr != null ? true : false;
+	}
+
+	public Set<K> keySet() {
+		Set<K> keys = new HashSet<>();
+
+		for (Object bucket : table) {
+			Node<K, V> curr = (Node<K, V>) bucket;
+			while(curr != null) {
+				keys.add(curr.key);
+				curr = curr.next;
 			}
-				return false;
+		}
+
+		return keys;
+	}
+
+	public void remove(K key) {
+		int index = hash(key);
+
+		if(table[index] == null) 
+			return;
+
+		if(((Node<K, V>) table[index]).key.equals(key)) 
+			table[index] = ((Node<K, V>) table[index]).next;
+		else {
+			Node<K, V> curr = (Node<K, V>) table[index];
+			while(curr.next != null) {
+				if(curr.next.key.equals(key)) {
+					curr.next = curr.next.next;
+					break;
+				}
+				curr = curr.next;
+			}
 		}
 	}
 
-	public Node[] resizeArray(Node[] oldTable) {
-		Node[] newTable = new Node[oldTable.length * 2];
-		for(int i = 0; i < oldTable.length; i++) 
-			newTable[i] = oldTable[i];
-		return newTable;
+	public Set<Node<K, V>> entrySet() {
+		Set<Node<K, V>> entries = new HashSet<>();
+
+		for (Object bucket : table) {
+			Node<K, V> curr = (Node<K, V>) bucket;
+			while(curr != null) {
+				entries.add(curr);
+				curr = curr.next;
+			}
+		}
+
+		return entries;
 	}
 
-	@Override
+	@Override 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+
 		int i = 0;
-		for (Node n : table) {
-			Node curr = n;
+		for (Object bucket : table) {
+			Node<K, V> curr = (Node<K, V>) bucket;
 			sb.append( "bucket " + i++ + ": " );
 			while(curr != null) {
 				sb.append( "{" + curr.key + ", " + curr.value + "} " );
 				curr = curr.next;
 			}
-			sb.append("\n");
+			sb.append('\n');
 		}
-		sb.append("\n");
+
 		return sb.toString();
 	}
 
-	private int getHashCode(K key) {
-		return Math.abs(key.hashCode()) % table.length;
+	private int hash(K key) {
+		return Math.abs(key.hashCode()) * 379 % table.length;
 	}
 
 	public static void main(String[] args) {
-		HashMap<String, Integer> map = new HashMap<>();
-		HashMap<Integer, String> map1 = new HashMap<>();
+		HashMap<Integer, String> map = new HashMap<>();
 
-		map.put("first", 1);
-		map.put("second", 2);
-		map.put("third", 3);
-		map.put("fourth", 4);
-		map1.put(5, "fifth");
-		map1.put(6, "six");
-		map1.put(7, "seven");
-		map1.put(8, "eight");
+		Random rand = new Random();
+		for (int i = 0; i < 10; i++) {
+			int randInt = rand.nextInt(1000);
+			map.put(randInt, randInt + "");
+		}
 
-		System.out.print(map.toString());
-		System.out.print(map1.toString());
+		System.out.println(map);	
+		for(Integer key : map.keySet())
+			if(key % 2 == 1)
+				map.remove(key);
+		System.out.println(map);	 
 	}
-
 }
