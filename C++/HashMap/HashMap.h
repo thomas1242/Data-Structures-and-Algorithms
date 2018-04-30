@@ -56,7 +56,6 @@ HashMap<K, V>::~HashMap() {
 
 template <class K, class V>
 void HashMap<K, V>::insert(const K& key, const V& val) {
-
 	int bucket = (int) hash_fn(key) % arrLength;
 
 	if(buckets[bucket] == nullptr)
@@ -65,10 +64,8 @@ void HashMap<K, V>::insert(const K& key, const V& val) {
 		HashMap<K, V>::Node * temp = buckets[bucket];
 		while(temp->key == key && temp->next != nullptr) 
 			temp = temp->next;
-		if(temp->key == key) {
-			erase(key);
-			insert(key, val);
-		}
+		if(temp->key == key) 
+			temp->value = val;
 		else
 			temp->next = new HashMap<K, V>::Node(key, val);
 	}
@@ -103,9 +100,9 @@ void HashMap<K, V>::erase(const K& key) {
 		if(temp->next == nullptr)
 			return;	// not found
 		else {
-			HashMap<K, V>::Node * tmp = temp->next;
+			HashMap<K, V>::Node * del = temp->next;
 			temp->next = temp->next->next;
-			delete tmp;
+			delete del;
 		}
 	}
 }
