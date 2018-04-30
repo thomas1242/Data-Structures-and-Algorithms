@@ -3,10 +3,8 @@ public class Queue<T> {
 	private static class Node<T> {
 		T data;
 		Node<T> next;
-		
 		public Node(T data) {
 			this.data = data;
-			next = null;
 		}
 	}
 
@@ -21,7 +19,7 @@ public class Queue<T> {
 	public void add(T data) {
 		Node<T> newNode = new Node<T>(data);
 
-		if(head == null) 
+		if (head == null) 
 			head = newNode;
 		else 
 			tail.next = newNode;
@@ -30,20 +28,36 @@ public class Queue<T> {
 	}
 
 	public T peek() {
-		if(head == null)
+		if (head == null)
 			return null;
 		else 
 			return (T) head.data;
 	}
 
-	public T remove() {
-		if(head == null)
+	// returns the head of this queue, or throws an exception if queue is empty
+	public T remove() {		
+		if (head == null)
+			throw new java.util.NoSuchElementException("oops");
+		else {
+			T data = (T) head.data;
+			if(head == tail)
+				head = tail = null;
+			else
+				head = head.next;
+			return data;
+		}
+	}
+
+	// returns the head of this queue, or null if this queue is empty
+	public T poll() {		
+		if (head == null)
 			return null;
 		else {
 			T data = (T) head.data;
-			head = head.next;
-			if(head == null)
-				tail = null;
+			if(head == tail)
+				head = tail = null;
+			else
+				head = head.next;
 			return data;
 		}
 	}
