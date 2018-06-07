@@ -1,3 +1,3 @@
 # Data-Structures-and-Algorithms
 
-Data Structures and Algorithms in Java and C++
+Data Structures and Algorithms from scratch in Java and C++
