@@ -74,13 +74,12 @@ class Permutations {
     // --------------------------------------------------------------------------------
 
 	public static void main(String[] args) {
-
-		List<Integer> items = new LinkedList<>();						// list of items to permute
-		for(int c : new int[]{1, 2, 3, 4, 5})                           // 5! = 120 permutations
+	    List<Integer> items = new LinkedList<>();	            // list of items to permute
+		for(int c : new int[]{1, 2, 3, 4, 5})               // 5! = 120 permutations
             items.add( c );
 
-         System.out.println( (new Permutations()).permutations_bfs(items).size() ); 
-         System.out.println( (new Permutations()).permutations_dfs1(items).size() ); 
-         System.out.println( (new Permutations()).permutations_dfs2(items).size() ); 
+            System.out.println( (new Permutations()).permutations_bfs(items).size() ); 
+            System.out.println( (new Permutations()).permutations_dfs1(items).size() ); 
+            System.out.println( (new Permutations()).permutations_dfs2(items).size() ); 
 	}
 }
