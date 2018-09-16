@@ -31,7 +31,7 @@ class Permutations {
 
     // --------------------------------------------------------------------------------
 
-	// DFS
+    // DFS
     List<List<Integer>> permutations_dfs2(List<Integer> list) {
         List<List<Integer>> perms = new LinkedList<>();
         dfs2(perms, list, new ArrayList<>(), 0);
@@ -51,7 +51,7 @@ class Permutations {
 
     // --------------------------------------------------------------------------------
 
-	// BFS
+    // BFS
     List<List<Integer>> permutations_bfs(List<Integer> list) {
         Queue<List<Integer>> q = new LinkedList<>();
         q.add(new LinkedList<>());
