@@ -1,5 +1,6 @@
 #ifndef TRIE_H
 #define TRIE_H
+
 #include <string>
 #include <iostream>
 
@@ -9,11 +10,13 @@ struct Node {
 	char c;				// character associated with this node
 	
 	Node() : Node(' ') {}
+
 	Node(char character) : isWord(false), c(character) {
 		children = new Node * [26];
 		for(int i = 0; i < 26; i++) 
 			children[i] = nullptr;
 	}
+
 	~Node() { delete[] children; }
 };
 
@@ -48,23 +51,6 @@ Trie::Trie() {
 	root = new Node(' ');
 }
 
-void Trie::printAll() const {
-	printAll(root, "");
-}
-
-void Trie::printAll(const Node * node, std::string prefix) const {
-	if(node == NULL)
-		return;
-
-	prefix = prefix + node->c;	// update prefix associated with this node
-
-	if(node->isWord == true)
-		std::cout << prefix << ", ";
-
-	for(int i = 0; i < 26; i++) 
-		printAll(node->children[i], prefix);
-}
-
 void Trie::insertWord(const std::string & word) {
 
 	Node * temp = root;
@@ -92,11 +78,24 @@ bool Trie::containsWord(const std::string & word) const {
 		temp = temp->children[index];
 	}
 
-	if(temp->isWord == true)
-		return true;
-	else
-		return false;	
+	return temp->isWord;
 }
 
+void Trie::printAll() const {
+	printAll(root, "");
+}
+
+void Trie::printAll(const Node * node, std::string prefix) const {
+	if(node == NULL)
+		return;
+
+	prefix = prefix + node->c;	// update prefix associated with this node
+
+	if(node->isWord == true)
+		std::cout << prefix << ", ";
+
+	for(int i = 0; i < 26; i++) 
+		printAll(node->children[i], prefix);
+}
 
 #endif

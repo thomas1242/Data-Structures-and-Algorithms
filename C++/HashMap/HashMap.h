@@ -25,13 +25,13 @@ class HashMap : public Map<K, V> {
 
 	private:
 		HashMap<K, V>::Node ** buckets;	// adjacency list
-		int arrLength;
+		int arrLength = 8;
+		double loadFactor = 0.75;
 		std::hash<K> hash_fn;
 };
 
 template <class K, class V>
-HashMap<K, V>::HashMap() {
-	arrLength = 8;
+HashMap<K, V>::HashMap() { 
 	buckets = new HashMap<K, V>::Node * [arrLength];
 	for(int i = 0; i < arrLength; i++)
 		buckets[i] = nullptr;
@@ -51,12 +51,12 @@ HashMap<K, V>::~HashMap() {
 		}
 	}
 
-	delete[] buckets;	// delete array of pointers
+	delete[] buckets;				// delete array of pointers
 }
 
 template <class K, class V>
 void HashMap<K, V>::insert(const K& key, const V& val) {
-	int bucket = (int) hash_fn(key) % arrLength;
+	int bucket = (int) hash_fn(key) % arrLength; 
 
 	if(buckets[bucket] == nullptr)
 		buckets[bucket] = new HashMap<K, V>::Node(key, val);
@@ -121,7 +121,5 @@ int HashMap<K, V>::size() const {
 	}
 	return sum;
 }
-
-
 
 #endif
