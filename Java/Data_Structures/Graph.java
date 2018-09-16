@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class Graph<T> {	// simple unweighted directed graph
+public class Graph<T> {	// unweighted directed graph
 
 	private static class Node<T> {
 		T id;
@@ -78,41 +78,32 @@ public class Graph<T> {	// simple unweighted directed graph
 			Node<T> curr = q.poll();
 			for(Node<T> adjNode : curr.adjNodes) { 
 				if( !adjNode.visited ) {
-					if(adjNode == endNode) {
-						endNode.parent = curr;
-						printList( reverseList(endNode) );
-					}
+					adjNode.parent = curr;
+					if(adjNode == endNode)
+						print( reverse(endNode) ); 
 					else {
 						q.add(adjNode);
 						adjNode.visited = true;
-						adjNode.parent = curr;
 					}
 				}
 			}
 		}
 	}
 
-	private Node<T> reverseList(Node<T> head) {
-        Node<T> curr = head;
-        Node<T> prev = null;
-        Node<T> next = null;
+	private Node<T> reverse(Node<T> head) {
+        Node<T> prev = null; 
         
-        while(curr != null) {
-            next = curr.parent;
-            curr.parent = prev;
-            prev = curr;
-            curr = next;
+        while(head != null) {
+            Node<T> next = head.parent;
+            head.parent = prev;
+            prev = head;
+            head = next;
         }
         
         return prev;
     }
 
-	public void clearVisited() {
-		for(Node<T> node : graph.values()) 
-			node.visited = false;
-	}
-
-	public void printList(Node<T> node) {
+	public void print(Node<T> node) {
 		while(node != null) {
 			System.out.print(node.id + " ");
 			node = node.parent;

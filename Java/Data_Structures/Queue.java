@@ -45,20 +45,6 @@ public class Queue<T> {
 		}
 	}
 
-	// returns the head of this queue, or null if this queue is empty
-	public T remove() {		
-		if (head == null)
-			return null;
-		else {
-			T data = (T) head.data;
-			if(head == tail)
-				head = tail = null;
-			else
-				head = head.next;
-			return data;
-		}
-	}
-
 	public int size() {
 		return size(head);
 	}
@@ -88,11 +74,6 @@ public class Queue<T> {
 	}
 
 	public static void main(String[] args) {
-		Queue<Integer> q = new Queue<>();
-
-		for (int i = 0; i < 10; i++) 
-			q.add(i);
-
-		System.out.println(q);
+		Queue<Integer> q = new Queue<>(); 
 	}
 }

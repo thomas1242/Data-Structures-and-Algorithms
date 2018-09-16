@@ -36,6 +36,17 @@ public class Stack<T> {
 		return top == null;
 	}
 
+	public int size() {
+		return size(top);
+	}
+
+	private int size(Node<T> node) {
+		if(node == null)
+			return 0;
+		else
+			return 1 + size(node.next);
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -49,17 +60,6 @@ public class Stack<T> {
 		sb.append("|___|\n");
 
 		return sb.toString();
-	}
-
-	public int size() {
-		return size(top);
-	}
-
-	private int size(Node<T> node) {
-		if(node == null)
-			return 0;
-		else
-			return 1 + size(node.next);
 	}
 
 	public static void main(String[] args) {

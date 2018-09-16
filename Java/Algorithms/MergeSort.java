@@ -28,17 +28,14 @@ public class MergeSort {
         while(j < rightArr.length)   arr[k++] = rightArr[j++];
     }
 
-    static void printArr(int[] arr) {
-        for(Integer n: arr)
-            System.out.print(n + " ");
-        System.out.println();
-    }
-
     public static void main(String[] args) {
         int[] arr = new int[]{9, 5, 1, 8, 7, 2, 4, 3, 6};
-        printArr(arr);
+        
+        System.out.println( java.util.Arrays.toString(arr) );
+
         mergeSort(arr, 0, arr.length - 1);
-        printArr(arr);
+
+        System.out.println( java.util.Arrays.toString(arr) ); 
     }
 
 }

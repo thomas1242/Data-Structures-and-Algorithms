@@ -1,4 +1,4 @@
-public class Heap<T extends Comparable<T>> {
+public class Heap<T extends Comparable<T>> {  // min heap 
     
     private Object[] arr;
     private int size;
@@ -15,26 +15,19 @@ public class Heap<T extends Comparable<T>> {
         return size == 0;
     }
 
-    @SuppressWarnings("unchecked")  
-    public void insert(T val) {
+    public void add(T val) {
         if(size == arr.length - 1) 
             arr = resizeArr(arr);
 
         arr[++size] = val;    // Insert element at bottom of heap and bubble element up tree to restore heap property
         int child = size;
 
-        while(child > 1) {
-            T parent = (T) arr[ getParent(child) ];
-            if(((T)arr[child]).compareTo(parent) < 0) {
-                swap(child, getParent(child));
-                child = getParent(child);
-            }
-            else    
-                break;
+        while(child > 1 && ((T)arr[child]).compareTo((T) arr[getParent(child)]) < 0) { 
+            swap(child, getParent(child));
+            child = getParent(child);  
         }
     }
 
-    @SuppressWarnings("unchecked")  
     public T remove() {
         if(size == 0) return null;
 
@@ -42,13 +35,11 @@ public class Heap<T extends Comparable<T>> {
         arr[1] = arr[size--]; // Replace root of heap with the last element on the last level
                               // and bubble element down tree to restore heap property
         heapify(1);
-
         return data;
     }
 
-    @SuppressWarnings("unchecked")  
     public void heapify(int root) {
-        if(getLeft(root) > size)   // no children
+        if(getLeft(root) > size)  
             return;
 
         int minChild = getRight(root) > size ? getLeft(root) : ((T)arr[getLeft(root)]).compareTo(((T)arr[getRight(root)])) < 0 ? getLeft(root) : getRight(root);
@@ -86,14 +77,5 @@ public class Heap<T extends Comparable<T>> {
 
     public static void main(String[] args) {
         Heap<Integer> heap = new Heap<>();
-        java.util.Random rand = new java.util.Random();
-        for(int i = 1; i <= 15; i++)  heap.insert(rand.nextInt(100));
-        while(!heap.isEmpty())        System.out.print(heap.remove() + " ");
-        System.out.println();
-
-        heap = new Heap<>(4);
-        for(int i = 1; i <= 15; i++)  heap.insert(rand.nextInt(100));
-        while(!heap.isEmpty())        System.out.print(heap.remove() + " ");
-        System.out.println();
     }
 }

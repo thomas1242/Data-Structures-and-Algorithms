@@ -1,37 +1,57 @@
 import java.util.List;
+import java.util.Queue;
 import java.util.LinkedList;
 
 class Permutations {
 
-	static List< List<Character> > generatePermutations( List<Character> items) {
-		List< List<Character> > permutations = new LinkedList<>();
-		permutations.add(new LinkedList<>());
+	// DFS / Backtracking
+    static List<List<Integer>> permutations_dfs(List<Integer> list) {
+        List<List<Integer>> perms = new LinkedList<>();
+        dfs(perms, list, new LinkedList<>(), 0);
+        return perms;
+    }
 
-		for(int i = 0; i < items.size(); i++) {
-			char currChar = items.get(i);
-			while(permutations.get(0).size() < i + 1) {
-				List<Character> part = permutations.remove(0);
-				for (int j = 0; j <= part.size(); j++) {
-					List<Character> newPerm = new LinkedList<>(part);
-					newPerm.add(j, currChar);
-					permutations.add(newPerm);
-				}
-			}
-		}
+    static void dfs(List<List<Integer>> permutations, List<Integer> orig, List<Integer> curr, int index) {
+        if(index == orig.size())
+            permutations.add(new LinkedList<>(curr));
+        else
+            for (int i = 0; i <= curr.size(); i++) {
+                curr.add(i, orig.get(index));
+                dfs(permutations, orig, curr, index + 1);
+                curr.remove(i);
+            }
+    }
 
-		return permutations;
-	}
+	// BFS
+    static List<List<Integer>> permutations_bfs(List<Integer> list) {
+        Queue<List<Integer>> q = new LinkedList<>();
+        q.add(new LinkedList<>());
+
+        for(int n : list) {
+            int size = q.size();
+            while (size-- > 0) {
+                List<Integer> lis = q.poll();
+                for (int i = 0; i <= lis.size(); i++) {
+                    List<Integer> part = new LinkedList<>(lis);
+                    part.add(i, n);
+                    q.add(part);
+                }
+            }
+        }
+
+        return new LinkedList<>(q);
+    }
 
 	public static void main(String[] args) {
 
-		List<Character> set = new LinkedList<>();						// set of items to permute
-		for(Character c : (new String("12345")).toCharArray() ) 			
-			set.add( c );
+		List<Integer> items = new LinkedList<>();						// list of items to permute
+		for(Integer c : new int[]{1, 2, 3, 4, 5}) 			
+			items.add( c );
 
 		int i = 0;
-		for(List<Character> list : generatePermutations( set ) ) {		// 5! = 120 permutations
+		for(List<Integer> list : permutations_dfs( items ) ) {		// 5! = 120 permutations
 			System.out.print("\n" + ++i + ": ");
-			for(char c : list) 
+			for(int c : list) 
 				System.out.print(c);
 		}
 

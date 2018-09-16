@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -36,7 +35,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
 			node.right = insert(node.right, data);
 		else
 			node.left = insert(node.left, data);
-
 		return node;
 	}
 
@@ -59,7 +57,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		else if (data.compareTo(node.data) > 0)
 			node.right = remove(node.right, data);
 		else {	
-
 			if(node.left == null)
 				return node.right;
 			if(node.right == null)
@@ -68,9 +65,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
 			T min = getMin(node.right);
 			node.data = min;
 			node.right = remove(node.right, min);
-		}
-
-		return node;	// return updated node
+		} 
+		return node;	
 	}
 
 	public T getMin(Node<T> node) {
@@ -116,7 +112,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		System.out.print(node.data + " ");
 	}
 
-	private void levelOrder(Node<T> node) {
+	private void levelOrder(Node<T> node) { // BFS
 		if (node == null)
 			return;
 
@@ -126,7 +122,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		Node<T> curr;
 		while(!q.isEmpty()) {
 			curr = q.poll();
-			System.out.print(node.data + " ");
+			System.out.print(node.data + " "); 
 			if(curr.left != null)
 				q.add(curr.left);
 			if(curr.right != null)

@@ -88,13 +88,5 @@ public class ArrayList<T> {
 
 	public static void main(String[] args) {
 		ArrayList<String> list = new ArrayList<>();
-		
-		for(String str : new String[]{"one", "two", "four", "eight", "sixteen"}) 
-			list.add( str );
-	
-		list.remove( 0 );
-		list.remove( "four" );
-
-		System.out.println( list );
 	}
 }

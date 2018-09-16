@@ -15,22 +15,6 @@ public class Trie {
 
 	public Trie() {}
 
-	public void printAllWords() {
-		printAllWords(root, "");
-	}
-
-	private void printAllWords(Node root, String prefix) {
-		if(root == null)
-			return;
-
-		if(root.isWord)
-			System.out.println(prefix);
-
-		for(int i = 0; i < root.children.length; i++) 
-			if(root.children[i] != null) 
-				printAllWords(root.children[i], prefix + root.children[i].c);
-	}
-
 	public void insertWord(String word) {
 		root = insertWord(root, word);
 	}
@@ -42,10 +26,7 @@ public class Trie {
 		Node curr = root;		
 		for(int i = 0; i < word.length(); i++) {
 			Character c = word.charAt(i);
-			int index = c - 'a';
-
-			if(c.compareTo('A') >= 0 && c.compareTo('Z') <= 0)	// case in-sensitive
-				index += 'a' - 'A';
+			int index = Character.isUpperCase(c) ? c - 'A' : c - 'a'; // case in-sensitive 
 
 			if(curr.children[index] == null)
 				curr.children[index] = new Node(c);
@@ -67,16 +48,31 @@ public class Trie {
 
 		Node curr = root;
 		for(int i = 0; i < word.length(); i++) {
-			int index = word.charAt(i) - 'a';
+			char c = word.charAt(i);
+			int index = Character.isUpperCase(c) ? c - 'A' : c - 'a'; // case in-sensitive 
+
 			if(curr.children[index] == null)
 				return false;
 			curr = curr.children[index];
 		}
 
-		if(curr.isWord == true)
-			return true;
-		else
-			return false;
+		return curr.isWord;
+	}
+
+	public void printAllWords() {
+		printAllWords(root, "");
+	}
+
+	private void printAllWords(Node root, String prefix) {
+		if(root == null)
+			return;
+
+		if(root.isWord)
+			System.out.println(prefix);
+
+		for(int i = 0; i < root.children.length; i++) 
+			if(root.children[i] != null) 
+				printAllWords(root.children[i], prefix + root.children[i].c);
 	}
 
 	public static void main(String[] args) {

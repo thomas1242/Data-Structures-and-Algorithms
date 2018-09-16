@@ -17,15 +17,19 @@ public class HashMap<K, V> {
 
 	private Object[] table;
 	private int size;
-	private final int initial_capacity = 4;
+	private final int initial_capacity = 8;
 	private final double load_factor = .75;
 
 	public HashMap() {
 		table = new Object[initial_capacity];
 	}
 
+	private int hash(K key) {
+		return Math.abs(key.hashCode()) % table.length;
+	}
+
 	public void put(K key, V value) {
-		if(++size > table.length * load_factor )
+		if(++size > table.length * load_factor)
 			resizeArray();
 
 		int index = hash(key);
@@ -65,6 +69,20 @@ public class HashMap<K, V> {
 		return curr != null ? true : false;
 	}
 
+	public Set<Node<K, V>> entrySet() {
+		Set<Node<K, V>> entries = new HashSet<>();
+
+		for (Object bucket : table) {
+			Node<K, V> curr = (Node<K, V>) bucket;
+			while(curr != null) {
+				entries.add(curr);
+				curr = curr.next;
+			}
+		}
+
+		return entries;
+	}
+
 	public Set<K> keySet() {
 		Set<K> keys = new HashSet<>();
 
@@ -79,13 +97,27 @@ public class HashMap<K, V> {
 		return keys;
 	}
 
+	public Set<V> values() {
+		Set<V> values = new HashSet<>();
+
+		for (Object bucket : table) {
+			Node<K, V> curr = (Node<K, V>) bucket;
+			while(curr != null) {
+				values.add(curr.value);
+				curr = curr.next;
+			}
+		}
+
+		return values;
+	}
+
 	public void remove(K key) {
 		int index = hash(key);
 
 		if(table[index] == null) 
 			return;
 
-		if(((Node<K, V>) table[index]).key.equals(key)) 
+		if(((Node<K, V>)table[index]).key.equals(key)) 
 			table[index] = ((Node<K, V>) table[index]).next;
 		else {
 			Node<K, V> curr = (Node<K, V>) table[index];
@@ -97,20 +129,6 @@ public class HashMap<K, V> {
 				curr = curr.next;
 			}
 		}
-	}
-
-	public Set<Node<K, V>> entrySet() {
-		Set<Node<K, V>> entries = new HashSet<>();
-
-		for (Object bucket : table) {
-			Node<K, V> curr = (Node<K, V>) bucket;
-			while(curr != null) {
-				entries.add(curr);
-				curr = curr.next;
-			}
-		}
-
-		return entries;
 	}
 
 	@Override 	
@@ -131,23 +149,15 @@ public class HashMap<K, V> {
 		return sb.toString();
 	}
 
-	private int hash(K key) {
-		return Math.abs(key.hashCode()) * 379 % table.length;
-	}
-
 	public static void main(String[] args) {
 		HashMap<Integer, String> map = new HashMap<>();
 
 		Random rand = new Random();
-		for (int i = 0; i < 10; i++) {
-			int randInt = rand.nextInt(1000);
+		for (int i = 0; i < 20; i++) {
+			int randInt = rand.nextInt(100);
 			map.put(randInt, randInt + "");
 		}
 
-		System.out.println(map);	
-		for(Integer key : map.keySet())
-			if(key % 2 == 1)
-				map.remove(key);
-		System.out.println(map);	 
+		System.out.println(map);	 	 
 	}
 }
