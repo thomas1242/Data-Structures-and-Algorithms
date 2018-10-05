@@ -2,6 +2,7 @@
 #define HASHMAP_H
 
 #include "Map.h"
+#include <set>
 #include <iostream>
 #include <functional>
 
@@ -22,10 +23,15 @@ class HashMap : public Map<K, V> {
 		V* find(const K& key) const;
 		void insert(const K& key, const V& value);
 		void erase(const K& key);
+		std::set<K> keySet();
+		std::set<V> values();
+		std::set<std::pair<K, V>> entrySet();
 
 	private:
 		HashMap<K, V>::Node ** buckets;	// adjacency list
-		int arrLength = 8;
+		void resize();
+		int numEntries = 0;
+		int arrLength  = 8;
 		double loadFactor = 0.75;
 		std::hash<K> hash_fn;
 };
@@ -56,6 +62,9 @@ HashMap<K, V>::~HashMap() {
 
 template <class K, class V>
 void HashMap<K, V>::insert(const K& key, const V& val) {
+	if(numEntries > loadFactor * arrLength) 
+		resize();
+
 	int bucket = (int) hash_fn(key) % arrLength; 
 
 	if(buckets[bucket] == nullptr)
@@ -64,11 +73,29 @@ void HashMap<K, V>::insert(const K& key, const V& val) {
 		HashMap<K, V>::Node * temp = buckets[bucket];
 		while(temp->key == key && temp->next != nullptr) 
 			temp = temp->next;
-		if(temp->key == key) 
+		if(temp->key == key) {
 			temp->value = val;
+			return;
+		}
 		else
 			temp->next = new HashMap<K, V>::Node(key, val);
 	}
+
+	++numEntries;
+}
+
+template <class K, class V>
+void HashMap<K, V>::resize() {
+	std::set<std::pair<K, V>> entries = entrySet();
+
+	delete[] buckets;
+	buckets = new HashMap<K, V>::Node * [arrLength *= 2];
+	for(int i = 0; i < arrLength; i++) 
+		buckets[i] = nullptr;
+
+	numEntries = 0;
+	for(std::pair<K, V> entry : entries)
+		insert(entry.first, entry.second);
 }
 
 template <class K, class V>
@@ -89,7 +116,6 @@ void HashMap<K, V>::erase(const K& key) {
 	int bucket = (int) hash_fn(key) % arrLength;
 
 	HashMap<K, V>::Node * temp = buckets[bucket];
-
 	if(temp->key == key) {
 		buckets[bucket] = buckets[bucket]->next;
 		delete temp;
@@ -105,21 +131,52 @@ void HashMap<K, V>::erase(const K& key) {
 			delete del;
 		}
 	}
+
+	numEntries--;
+}
+
+template <class K, class V>
+std::set<K> HashMap<K, V>::keySet() {
+	std::set<K> keys;
+	for(int i = 0; i < arrLength; i++) { 
+		HashMap<K, V>::Node * temp = buckets[i];
+		while(temp != nullptr) {
+			keys.insert(temp->key);
+			temp = temp->next;
+		} 
+	}
+	return keys;
+}
+
+template <class K, class V>
+std::set<V> HashMap<K, V>::values() {
+	std::set<V> values;
+	for(int i = 0; i < arrLength; i++) { 
+		HashMap<K, V>::Node * temp = buckets[i];
+		while(temp != nullptr) {
+			values.insert(temp->value);
+			temp = temp->next;
+		} 
+	}
+	return values;
+}
+
+template <class K, class V>
+std::set<std::pair<K, V>> HashMap<K, V>::entrySet() {
+	std::set< std::pair<K, V> > entries;
+	for(int i = 0; i < arrLength; i++) { 
+		HashMap<K, V>::Node * temp = buckets[i];
+		while(temp != nullptr) {
+			entries.insert(std::make_pair(temp->key, temp->value));
+			temp = temp->next;
+		} 
+	}
+	return entries;
 }
 
 template <class K, class V>
 int HashMap<K, V>::size() const {
-	int sum = 0;
-	for(int i = 0; i < arrLength; i++) {
-		int len = 0;
-		HashMap<K, V>::Node * temp = buckets[i];
-		while(temp != nullptr) {
-			len++;
-			temp = temp->next;
-		}
-		sum += len;
-	}
-	return sum;
+	return numEntries;
 }
 
 #endif

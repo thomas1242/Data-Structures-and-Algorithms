@@ -15,6 +15,8 @@ int main() {
 	hashMap_ptr->insert(3, "three_2");
 	hashMap_ptr->insert(2, "two");
 
+	std::cout << "size: " << hashMap_ptr->size() << std::endl;
+
 	res &= *hashMap_ptr->find(3) != "three_1";
 	res &= *hashMap_ptr->find(3) == "three_2";
 
