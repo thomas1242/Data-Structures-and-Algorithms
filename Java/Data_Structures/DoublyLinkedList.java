@@ -2,8 +2,7 @@ public class DoublyLinkedList<T> {
 
 	private static class Node<T> {
 		T data;
-		Node<T> next;
-		Node<T> prev;
+		Node<T> next, prev;
 		public Node(T data) {
 			this.data = data;
 		}
@@ -20,10 +19,7 @@ public class DoublyLinkedList<T> {
 	}
 
 	private int size(Node<T> node) {
-		if(node == null)
-			return 0;
-		else
-			return 1 + size(node.next);
+		return node == null ? 0 : 1 + size(node.next);
 	}
 
 	public void push(T data) {
@@ -39,13 +35,12 @@ public class DoublyLinkedList<T> {
 
 	public T pop() {
 		if(head == null)
-			return null;
+			throw new java.util.NoSuchElementException("oops");
 
 		T data = head.data;
 
 		head = head.next;
-		if(head != null)
-			head.prev = null;
+		if(head != null) head.prev = null;
 
 		return data;
 	}
@@ -64,16 +59,15 @@ public class DoublyLinkedList<T> {
 		}
 	}
 
-	public void insert(T data, int index) {
+	public void insert(int index, T data) {
 		if(index < 0 || index > size())
-			return;
+			throw new java.lang.IndexOutOfBoundsException("oops");
 
 		Node<T> newNode = new Node<T>(data);
 
 		if(index == 0) {
 			newNode.next = head;
-			if(head != null)
-				head.prev = newNode;
+			if(head != null) head.prev = newNode;
 			head = newNode;
 		}
 		else {
@@ -84,19 +78,17 @@ public class DoublyLinkedList<T> {
 			newNode.next = curr.next;
 			newNode.prev = curr;
 			curr.next = newNode;
-			if(newNode.next != null)
-				newNode.next.prev = newNode;
+			if(newNode.next != null) newNode.next.prev = newNode;
 		}
 	}
 
-	public void remove(T data) {
+	public boolean remove(T data) {
 		if(head == null)
-			return;			
+			return false;			
 
 		if(head.data == data) {
 			head = head.next;
-			if(head != null) 
-				head.prev = null;
+			if(head != null) head.prev = null;
 		}
 		else { 
 			Node<T> curr = head;
@@ -104,12 +96,12 @@ public class DoublyLinkedList<T> {
 				curr = curr.next;
 
 			if(curr == null)	// not found
-				return;
+				return false;
 
 			curr.prev.next = curr.next;
-			if(curr.next != null)
-				curr.next.prev = curr.prev;
+			if(curr.next != null) curr.next.prev = curr.prev;
 		}
+		return true;
 	}
 
 	@Override
@@ -126,21 +118,6 @@ public class DoublyLinkedList<T> {
 	}
 
 	public static void main(String[] args) {
-		
-		DoublyLinkedList<String> strings = new DoublyLinkedList<>();
-		DoublyLinkedList<Integer> ints = new DoublyLinkedList<>();
-
-		strings.push("one");
-		strings.append("hello");
-		strings.insert("world", 2);
-		strings.remove("one");
-
-		ints.push(1);
-		ints.push(2);
-		ints.append(3);
-		ints.pop();
-
-		System.out.println(ints);
-		System.out.println(strings);
+		DoublyLinkedList<String> strings = new DoublyLinkedList<>();  
 	}
 }
