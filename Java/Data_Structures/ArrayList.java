@@ -11,27 +11,11 @@ public class ArrayList<T> {
 		arr = new Object[initialCapacity];
 	}
 
-	public boolean isEmpty() {
-		return size == 0;	
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		for(int i = 0; i < size; i++)
-			sb.append( arr[i] ).append( ' ' );
-
-		return sb.toString();
-	}
-
-	private Object[] resizeArr(Object[] oldArr) {
-		Object[] newArr = new Object[oldArr.length * 2];
+	public T get(int index) {		
+		if(index < 0 || index >= size)
+			throw new IndexOutOfBoundsException("Out of bounds: " + index + " not within [0," + (size - 1) + "]");
 		
-		for(int i = 0; i < oldArr.length; i++) 
-			newArr[i] = oldArr[i];
-
-		return newArr;
+		return (T) arr[index];
 	}
 
 	public void add(T element) {				
@@ -49,26 +33,17 @@ public class ArrayList<T> {
 			arr = resizeArr(arr);
 			
 		for(int i = size + 1; i > index; i--)
-			arr[i] = arr[i - 1];
+			arr[i] = arr[i - 1]; 
 
 		arr[index] = element;
 
 		size++;
 	}
 
-	@SuppressWarnings("unchecked")	
-	public T get(int index) {		
-		if(index < 0 || index >= size)
-			throw new IndexOutOfBoundsException("Out of bounds: " + index + " not within [0," + (size - 1) + "]");
-		else
-			return (T) arr[index];
-	}
-
-	@SuppressWarnings("unchecked")	 
 	public void remove(T element) {		
 		if(isEmpty()) 
 			return;
-
+		
 		int index = 0;
 		while(index < size && element != (T) arr[index])
 			index++;
@@ -84,6 +59,29 @@ public class ArrayList<T> {
 			arr[i] = arr[i + 1];	
 		
 		size--;
+	}
+
+	public boolean isEmpty() {
+		return size == 0;	
+	}
+
+	private Object[] resizeArr(Object[] oldArr) {
+		Object[] newArr = new Object[oldArr.length * 2];
+		
+		for(int i = 0; i < oldArr.length; i++) 
+			newArr[i] = oldArr[i];
+
+		return newArr;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		for(int i = 0; i < size; i++)
+			sb.append( arr[i] ).append( ' ' );
+
+		return sb.toString();
 	}
 
 	public static void main(String[] args) {
