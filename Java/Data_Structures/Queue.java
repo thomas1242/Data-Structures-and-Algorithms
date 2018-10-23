@@ -8,7 +8,7 @@ public class Queue<T> {
 		}
 	}
 
-	private Node<T> head; 
+	private Node<T> head;
 	private Node<T> tail;
 
 	public Queue() {}
@@ -31,7 +31,6 @@ public class Queue<T> {
 			return head.data;
 	}
 
-	// returns the head of this queue, or throws an exception if queue is empty
 	public T remove() {		
 		if (head == null)
 			throw new java.util.NoSuchElementException("oops");

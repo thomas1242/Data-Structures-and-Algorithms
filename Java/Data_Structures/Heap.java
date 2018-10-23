@@ -11,10 +11,6 @@ public class Heap<T extends Comparable<T>> {  // min heap
     	arr = new Object[initialCapacity];
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
     public void add(T val) {
         if(size == arr.length - 1) 
             arr = resizeArr(arr);
@@ -66,6 +62,10 @@ public class Heap<T extends Comparable<T>> {  // min heap
 
     private int getParent(int index) {
         return index / 2;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
     }
 
     private Object[] resizeArr(Object[] arr) {

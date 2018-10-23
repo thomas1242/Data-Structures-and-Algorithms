@@ -20,14 +20,14 @@ public class Stack<T> {
 
 	public void pop() {
 		if(top == null)
-			return;
+			throw new java.util.EmptyStackException();
 		else 
 			top = top.next;
 	}
 
 	public T peek() {
 		if(top == null)
-			return null;
+			throw new java.util.EmptyStackException();
 		else
 			return top.data;
 	}
