@@ -29,10 +29,12 @@ public class HashMap<K, V> {
 	}
 
 	public void put(K key, V value) {
-		if(++size > table.length * load_factor)
+		if(++size > load_factor * table.length)
 			resizeArray();
 
 		int index = hash(key);
+
+		if(containsKey(key)) remove(key);
 
 		Node<K, V> newEntry = new Node<>(key, value);
 		newEntry.next = (Node<K, V>) table[index];
@@ -152,11 +154,8 @@ public class HashMap<K, V> {
 	public static void main(String[] args) {
 		HashMap<Integer, String> map = new HashMap<>();
 
-		Random rand = new Random();
-		for (int i = 0; i < 20; i++) {
-			int randInt = rand.nextInt(100);
-			map.put(randInt, randInt + "");
-		}
+		map.put(0x37, "test");
+		map.put(0x37, "testing");
 
 		System.out.println(map);	 	 
 	}
