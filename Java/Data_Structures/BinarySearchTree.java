@@ -131,16 +131,15 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
 	static class C implements Comparable<C> {
 		private int score;
-
+		
 		public C(int score) {
 			this.score = score;
 		}
-
+		
 		@Override
 		public int compareTo(C o) {
 			return this.score - o.score;
 		}
-
 		@Override
 		public String toString() {
 			return "[" + score + "]";
