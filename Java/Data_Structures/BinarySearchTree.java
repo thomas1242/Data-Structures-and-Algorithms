@@ -1,12 +1,11 @@
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.LinkedList;
 
 public class BinarySearchTree<T extends Comparable<T>> {
 
 	private static class Node<T> {
 		T data; 
-		Node<T> left;
-		Node<T> right;
+		Node<T> left, right;
 		public Node(T data) {
 			this.data = data;
 		}
@@ -20,12 +19,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		root = insert(root, data);
 	}
 
-	public boolean contains(T data) {
-		return contains(root, data);
-	}
-
 	public void remove(T data) {
 		root = remove(root, data);
+	}
+
+	public boolean contains(T data) {
+		return contains(root, data);
 	}
 
 	private Node<T> insert(Node<T> node, T data) {
@@ -130,28 +129,34 @@ public class BinarySearchTree<T extends Comparable<T>> {
 		}
 	}
 
+	static class C implements Comparable<C> {
+		private int score;
+
+		public C(int score) {
+			this.score = score;
+		}
+
+		@Override
+		public int compareTo(C o) {
+			return this.score - o.score;
+		}
+
+		@Override
+		public String toString() {
+			return "[" + score + "]";
+		}
+	}
+
 	public static void main(String[] args) {
+		BinarySearchTree<C> bst = new BinarySearchTree<>();
 
-		BinarySearchTree<String> strs = new BinarySearchTree<>();
-		BinarySearchTree<Integer> ints = new BinarySearchTree<>();
+		bst.insert( new C(7) );
+		bst.insert( new C(3) );
+		bst.insert( new C(15) );
+		bst.insert( new C(30) );
+		bst.insert( new C(25) ); 
 
-		ints.insert( 7 );
-		ints.insert( 3 );
-		ints.insert( 15 );
-		ints.insert( 30 );
-		ints.insert( 25 );
-
-		strs.insert("hello");
-		strs.insert("world");
-		strs.insert("one");
-		strs.insert("and");;
-		strs.insert("zero");
-
-		ints.inOrder();
-		System.out.println();
-
-		strs.inOrder();
-		System.out.println();
+		bst.inOrder(); 
 	}
 
 }
