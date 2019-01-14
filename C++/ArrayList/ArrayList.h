@@ -36,27 +36,27 @@ class ArrayList : public LinearList<T> {
         	for(int i = 0; i < old.listLength; i++)  arr[i] = old.arr[i];
 		}
 
-		ArrayList<T>& operator=(const ArrayList<T>& old) {					// copy assignment
+		ArrayList<T>& operator=(const ArrayList<T>& old) {			// copy assignment
 			delete[] arr;
         	arr = new T[old.arrayLength];
         	for(int i = 0; i < old.listLength; i++) arr[i] = old.arr[i];
         	listLength = old.listLength;
-            arrayLength = old.arrayLength;
-            return *this;
+        	arrayLength = old.arrayLength;
+        	return *this;
 		}
 
-		ArrayList(ArrayList<T>&& old) : arr{old.arr},						// move constructor
+		ArrayList(ArrayList<T>&& old) : arr{old.arr},				// move constructor
 		                                listLength{old.listLength},
 		                                arrayLength{old.arrayLength}
 		{
 			old.arr = nullptr;
 		}
 
-		ArrayList<T>& operator=(ArrayList<T>&& old) {						// move assignment
+		ArrayList<T>& operator=(ArrayList<T>&& old) {				// move assignment
 			delete[] arr;
-            arr = old.arr;
-            listLength = old.listLength;
-            arrayLength = old.arrayLength;
+        	arr = old.arr;
+        	listLength = old.listLength;
+        	arrayLength = old.arrayLength;
 			old.arr = nullptr;
 			return *this;
 		}
