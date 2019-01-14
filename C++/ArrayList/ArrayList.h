@@ -38,7 +38,7 @@ class ArrayList : public LinearList<T> {
 
 		ArrayList<T>& operator=(const ArrayList<T>& old) {			// copy assignment
 			delete[] arr;
-        	arr = new T[old.arrayLength];
+			arr = new T[old.arrayLength];
         	for(int i = 0; i < old.listLength; i++) arr[i] = old.arr[i];
         	listLength = old.listLength;
         	arrayLength = old.arrayLength;
