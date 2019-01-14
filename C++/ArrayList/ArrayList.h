@@ -25,13 +25,13 @@ class ArrayList : public LinearList<T> {
 		int arrayLength;
 
 	public:
-		ArrayList(int initCapacity = 0) : arr{new T[initCapacity]},			// default constructor
-										  listLength(initCapacity),
+		ArrayList(int initCapacity = 0) : arr{new T[initCapacity]},         // default constructor
+		                                  listLength(initCapacity),
 		                                  arrayLength(initCapacity) {}
 
 		ArrayList(const ArrayList<T>& old) : arr{new T[old.arrayLength]},	// copy constructor
-											 listLength{old.listLength},
-											 arrayLength{old.arrayLength}
+		                                     listLength{old.listLength},
+		                                     arrayLength{old.arrayLength}
 		{
             for(int i = 0; i < old.listLength; i++)  arr[i] = old.arr[i];
 		}
