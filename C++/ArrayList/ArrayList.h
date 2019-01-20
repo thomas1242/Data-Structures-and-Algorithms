@@ -5,19 +5,25 @@
 #include "LinearList.h"
 
 template<class T>
-void resize1DArray(T *& oldArr, int oldLength, int newLength) {
-	if(newLength < 0)
-		throw std::length_error("new length must be >= 0");
+void resize1DArray(T *& oldArr, int oldLength, int newLength);
 
-	T * newArr = new T[newLength];
-	for(int i = 0; i < oldLength; i++)
-		newArr[i] = oldArr[i];
-	delete[] oldArr;
-	oldArr = newArr;
-}
-
-template <class T>
+template<typename T>
 class ArrayList : public LinearList<T> {
+
+	class Iterator {
+		private:
+		    int index;
+			ArrayList<T> list;
+		public:
+		    Iterator(ArrayList<T> & l, int i) : index{i}, list{l} {}
+		    T& operator*() const { return list.get(index); }
+		    bool operator!=(const Iterator& other) const { return !(*this == other); }
+		    bool operator==(const Iterator& other) const { return index == other.index; }
+		    Iterator& operator++() {
+		        ++index;            
+		        return *this;
+		    }
+	};
 
 	private:
 		T * arr = nullptr;
@@ -25,15 +31,26 @@ class ArrayList : public LinearList<T> {
 		int arrayLength;
 
 	public:
+		Iterator begin() { return Iterator(*this, 0); }
+		Iterator end()   { return Iterator(*this, listLength); }
+
 		ArrayList(int initCapacity = 0) : arr{new T[initCapacity]},         // default constructor
 		                                  listLength(initCapacity),
 		                                  arrayLength(initCapacity) {}
+
+		ArrayList(std::initializer_list<T> l) : arr{new T[l.size()]},         // initializer list constructor
+		                                        listLength(l.size()),
+		                                        arrayLength(l.size()) 
+		{ 
+			int i = 0;
+			for(auto& x : l) arr[i++] = x;
+		}
 
 		ArrayList(const ArrayList<T>& old) : arr{new T[old.arrayLength]},	// copy constructor
 		                                     listLength{old.listLength},
 		                                     arrayLength{old.arrayLength}
 		{
-			for(int i = 0; i < old.listLength; i++)  arr[i] = old.arr[i];
+			for(int i = 0; i < old.listLength; i++) arr[i] = old.arr[i];
 		}
 
 		ArrayList<T>& operator=(const ArrayList<T>& old) {			// copy assignment
@@ -62,7 +79,6 @@ class ArrayList : public LinearList<T> {
 		}
 
 		~ArrayList() { delete[] arr; };									    // destructor
-
 		T& get(int index) const;											// inherited virtual functions
 		T& operator[](int i) { return get(i); }
 		void append(const T& theElement);
@@ -70,8 +86,7 @@ class ArrayList : public LinearList<T> {
 		void remove(int index);
 		std::string to_string() const;
 		bool isEmpty() const { return listLength == 0; };
-		int  size() const { return listLength; };
-
+		int size() const { return listLength; };
 };
 
 template<class T>
@@ -122,5 +137,19 @@ std::string ArrayList<T>::to_string() const{
 		res += std::to_string(arr[i]) + " ";
 	return res + '\n';
 }
+
+template<class T>
+void resize1DArray(T *& oldArr, int oldLength, int newLength) {
+	if(newLength < 0)
+		throw std::length_error("new length must be >= 0");
+
+	T * newArr = new T[newLength];
+	for(int i = 0; i < oldLength; i++)
+		newArr[i] = oldArr[i];
+	delete[] oldArr;
+	oldArr = newArr;
+}
+
+
 
 #endif
